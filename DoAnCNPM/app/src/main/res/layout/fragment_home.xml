@@ -1,19 +1,84 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <!-- Banner -->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/bannerPager"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/round_bg"
+            android:padding="16dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
 
-    <!-- Danh sách bánh -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCakes"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/tvViTri"
+                    android:text="Hóc Môn, Việt Nam"
+                    android:textSize="16sp"
+                    android:textColor="#F3F5F6"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableStart="@drawable/baseline_add_location_24"
+                    android:drawablePadding="7dp"
+                    android:layout_marginEnd="19dp" />
 
-</LinearLayout>
+                <ImageView
+                    android:id="@+id/igThongbao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_circle_notifications_24" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="24dp"
+                android:gravity="center_vertical">
+                <EditText
+                    android:id="@+id/edTimKiem"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/botrontimkiem"
+                    android:drawableStart="@drawable/baseline_content_paste_search_24"
+                    android:drawablePadding="8dp"
+                    android:hint="Tìm kiếm sản phẩm..."
+                    android:padding="8dp"
+                    android:textSize="16sp" />
+                <ImageView
+                    android:id="@+id/igBoLoc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/baseline_blinds_closed_24" />
+            </LinearLayout>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sản phẩm nổi bậc"
+            android:layout_margin="15dp"
+            android:textSize="18sp"
+            android:textColor="#E61818">
+
+        </TextView>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/Banner"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="24dp"
+            android:clipToPadding="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
+    </LinearLayout>
+</ScrollView>
