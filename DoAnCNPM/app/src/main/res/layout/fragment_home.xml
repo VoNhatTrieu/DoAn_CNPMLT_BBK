@@ -1,36 +1,47 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="#FFFFFF">
 
+    <!-- Fixed upper content -->
     <LinearLayout
+        android:id="@+id/fixed_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Phần màu nâu -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:background="@drawable/round_bg"
-            android:padding="16dp">
+            android:orientation="vertical"
+            android:padding="17dp">
+
+            <!-- Dòng Vị trí và chuông -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
                 android:gravity="center_vertical"
-                android:layout_marginTop="8dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/tvViTri"
-                    android:text="Hóc Môn, Việt Nam"
-                    android:textSize="16sp"
-                    android:textColor="#F3F5F6"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="19dp"
                     android:layout_weight="1"
                     android:drawableStart="@drawable/baseline_add_location_24"
                     android:drawablePadding="7dp"
-                    android:layout_marginEnd="19dp" />
+                    android:text="Hóc Môn, Việt Nam"
+                    android:textColor="#F3F5F6"
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/igThongbao"
@@ -38,16 +49,19 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/baseline_circle_notifications_24" />
             </LinearLayout>
+
+            <!-- Thanh tìm kiếm -->
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp"
-                android:gravity="center_vertical">
+                android:layout_width="380dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
                 <EditText
                     android:id="@+id/edTimKiem"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="367dp"
+                    android:layout_height="54dp"
                     android:layout_weight="1"
                     android:background="@drawable/botrontimkiem"
                     android:drawableStart="@drawable/baseline_content_paste_search_24"
@@ -55,6 +69,7 @@
                     android:hint="Tìm kiếm sản phẩm..."
                     android:padding="8dp"
                     android:textSize="16sp" />
+
                 <ImageView
                     android:id="@+id/igBoLoc"
                     android:layout_width="wrap_content"
@@ -63,22 +78,81 @@
                     android:src="@drawable/baseline_blinds_closed_24" />
             </LinearLayout>
         </LinearLayout>
+
+        <!-- Tiêu đề sản phẩm nổi bật -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sản phẩm nổi bậc"
-            android:layout_margin="15dp"
-            android:textSize="18sp"
-            android:textColor="#E61818">
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="Sản phẩm nổi bật"
+            android:textColor="#E61818"
+            android:textSize="18sp" />
 
-        </TextView>
+        <!-- Banner -->
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/Banner"
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_marginTop="24dp"
+            android:layout_height="173dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:clipToPadding="false"
             android:paddingStart="16dp"
             android:paddingEnd="16dp" />
+
+        <!-- TabLayout cho chấm tròn -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/chamtron"
+            android:layout_width="112dp"
+            android:layout_height="10dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            app:tabIndicatorColor="#E61818"
+            app:tabIndicatorHeight="4dp"
+            app:tabSelectedTextColor="@android:color/transparent" />
+
+        <!-- Danh mục sản phẩm -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Danh mục sản phẩm"
+                android:textColor="#15958B"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
     </LinearLayout>
-</ScrollView>
+
+    <!-- Scrolling RecyclerView -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/fixed_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/dsSP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
