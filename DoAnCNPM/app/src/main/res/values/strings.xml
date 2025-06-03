@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">My Application</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_name">Đặt Bánh Online</string>
+    <string-array name="loai_banh_array">
+        <item>Bánh sinh nhật</item>
+        <item>Bánh cưới</item>
+        <item>Bánh trung thu</item>
+        <item>Bánh quy</item>
+    </string-array>
 </resources>
