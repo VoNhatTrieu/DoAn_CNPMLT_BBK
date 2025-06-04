@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="0dp"
+    android:background="@android:color/white">
+
+    <!-- 1. AppBar với back button và tiêu đề -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:backgroundTint="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:navigationIcon="@drawable/baseline_arrow_back_24"
+        app:titleTextColor="@android:color/white"
+        app:title="Tên sản phẩm" />
+
+    <!-- 2. Hình ảnh sản phẩm (giảm chiều cao để vừa màn hình) -->
+    <ImageView
+        android:id="@+id/ivProductImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/anh1"
+        app:layout_constraintTop_toBottomOf="@id/topAppBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.30" />
+
+    <!-- 3. Mô tả và thành phần (giảm nội dung) -->
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Mô tả ngắn gọn: Bánh kem socola mềm mịn, phủ kem bơ socola, trang trí hoa tươi."
+        android:textSize="14sp"
+        android:textColor="#333333"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="3"
+        android:ellipsize="end"
+        app:layout_constraintTop_toBottomOf="@id/ivProductImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp" />
+
+    <!-- 4. Đánh giá và bình luận mẫu (giảm nội dung, tối đa 2 dòng) -->
+    <TextView
+        android:id="@+id/tvReviews"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="“Bánh ngon, giao hàng nhanh!” – Minh Anh.\n“Rất hài lòng với sản phẩm.” – Thủy Tiên."
+        android:textSize="14sp"
+        android:textColor="#555555"
+        android:lineSpacingExtra="2dp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        app:layout_constraintTop_toBottomOf="@id/tvDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp" />
+
+    <!-- 5. Label “Chọn kích cỡ:” -->
+    <TextView
+        android:id="@+id/tvSelectSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chọn kích cỡ:"
+        android:textSize="15sp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toBottomOf="@id/tvReviews"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp" />
+
+    <!-- 6. ChipGroup để chọn size (Nhỏ, Vừa, Lớn) -->
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:singleSelection="true"
+        app:chipSpacing="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tvSelectSize"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nhỏ"
+            android:checked="true" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vừa" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lớn" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <!-- 7. Giá hiện tại (TextView) -->
+    <TextView
+        android:id="@+id/tvPriceCurrent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="100.000đ"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/chipGroupSize"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toStartOf="@id/btnAddToCart"
+        app:layout_constraintBottom_toBottomOf="@id/btnAddToCart" />
+
+    <!-- 8. Nút “Thêm vào giỏ hàng” -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAddToCart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thêm vào giỏ hàng"
+        app:icon="@drawable/baseline_add_shopping_cart_24"
+        app:iconPadding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/chipGroupSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

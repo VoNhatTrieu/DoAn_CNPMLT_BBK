@@ -46,7 +46,7 @@
 
             <!-- Thanh tìm kiếm -->
             <LinearLayout
-                android:layout_width="380dp"
+                android:layout_width="370dp"
                 android:layout_height="64dp"
                 android:layout_marginTop="16dp"
                 android:gravity="center_vertical"
@@ -58,7 +58,7 @@
                     android:layout_height="54dp"
                     android:layout_weight="1"
                     android:background="@drawable/botrontimkiem"
-                    android:drawableStart="@drawable/baseline_content_paste_search_24"
+                    android:drawableStart="@android:drawable/ic_menu_search"
                     android:drawablePadding="8dp"
                     android:hint="Tìm kiếm sản phẩm..."
                     android:padding="8dp"

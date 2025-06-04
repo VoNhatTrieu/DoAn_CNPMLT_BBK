@@ -22,8 +22,9 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ProductV
     private Context context;
     private List<SanPham> productList;
 
-    public SanPhamAdapter(List<SanPham> sanPhamList) {
+    public SanPhamAdapter(Context context,List<SanPham> sanPhamList) {
         this.productList = sanPhamList;
+        this.context=context;
     }
     public void updateData(List<SanPham> newList) {
         productList = newList;
