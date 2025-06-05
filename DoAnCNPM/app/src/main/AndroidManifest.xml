@@ -24,6 +24,12 @@
             android:exported="false"
             tools:ignore="Instantiatable" />
         <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false"/>
+        <activity
             android:name=".HomeFragment"
             android:exported="true"
             tools:ignore="Instantiatable" />
