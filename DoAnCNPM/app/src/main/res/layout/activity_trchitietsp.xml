@@ -2,144 +2,268 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="0dp"
     android:background="@android:color/white">
 
-    <!-- 1. AppBar với back button và tiêu đề -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBar"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        android:backgroundTint="@color/black"
-        app:layout_constraintTop_toTopOf="parent"
+    <!-- Hình ảnh sản phẩm -->
+    <LinearLayout
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:navigationIcon="@drawable/baseline_arrow_back_24"
-        app:titleTextColor="@android:color/white"
-        app:title="Tên sản phẩm" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!-- 2. Hình ảnh sản phẩm (giảm chiều cao để vừa màn hình) -->
+        <ImageView
+            android:id="@+id/back_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="Quay lại"
+            android:src="@drawable/baseline_arrow_back_24" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="365dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:text="Tiêu đề sản phẩm"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
     <ImageView
-        android:id="@+id/ivProductImage"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:id="@+id/ivSP"
+        android:layout_width="406dp"
+        android:layout_height="227dp"
         android:scaleType="centerCrop"
         android:src="@drawable/anh1"
-        app:layout_constraintTop_toBottomOf="@id/topAppBar"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.30" />
+        app:layout_constraintHeight_percent="0.30"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_layout" />
 
-    <!-- 3. Mô tả và thành phần (giảm nội dung) -->
     <TextView
-        android:id="@+id/tvDescription"
+        android:id="@+id/tvIngredientsLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Thành phần"
+        android:textColor="#E61818"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/ivSP"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvChitietTP"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Mô tả ngắn gọn: Bánh kem socola mềm mịn, phủ kem bơ socola, trang trí hoa tươi."
-        android:textSize="14sp"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:text="Kem sữa tươi, dâu tây, đường, bột mì, trứng, vani."
         android:textColor="#333333"
-        android:lineSpacingExtra="2dp"
-        android:maxLines="3"
-        android:ellipsize="end"
-        app:layout_constraintTop_toBottomOf="@id/ivProductImage"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/tvIngredientsLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 4. Đánh giá và bình luận mẫu (giảm nội dung, tối đa 2 dòng) -->
+    <!-- Đánh giá khách hàng -->
     <TextView
-        android:id="@+id/tvReviews"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="“Bánh ngon, giao hàng nhanh!” – Minh Anh.\n“Rất hài lòng với sản phẩm.” – Thủy Tiên."
-        android:textSize="14sp"
-        android:textColor="#555555"
-        android:lineSpacingExtra="2dp"
-        android:maxLines="2"
-        android:ellipsize="end"
-        app:layout_constraintTop_toBottomOf="@id/tvDescription"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp" />
-
-    <!-- 5. Label “Chọn kích cỡ:” -->
-    <TextView
-        android:id="@+id/tvSelectSize"
+        android:id="@+id/tvSao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chọn kích cỡ:"
-        android:textSize="15sp"
-        android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@id/tvReviews"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp" />
+        android:layout_marginTop="8dp"
+        android:text="Đánh giá sao"
+        android:textColor="#E61818"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/tvChitietTP"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- 6. ChipGroup để chọn size (Nhỏ, Vừa, Lớn) -->
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroupSize"
+    <LinearLayout
+        android:id="@+id/danhgia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:singleSelection="true"
-        app:chipSpacing="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tvSelectSize"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp">
+        android:layout_marginTop="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tvSao"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_small"
+        <RatingBar
+            android:id="@+id/rating"
+            style="@style/Widget.AppCompat.RatingBar.Indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:rating="4.5"
+            android:stepSize="0.1" />
+
+        <TextView
+            android:id="@+id/saodanhgia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="4.5/5"
+            android:textColor="#9C27B0"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/dgcuab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        android:text="Đánh giá của bạn"
+        android:textColor="#644B4B"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/danhgia"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/NhapDG"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:imeOptions="actionDone"
+        android:hint="Mời bạn đánh giá sản phẩm..."
+        android:maxLines="4"
+        android:background="@drawable/nhapdanhgia"
+        app:layout_constraintTop_toBottomOf="@id/dgcuab"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btnGuiDanhGia"
+        android:layout_width="124dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:backgroundTint="#3B84BD"
+        android:elevation="4dp"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="6dp"
+        android:text="Gửi đánh giá"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/NhapDG" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvbl"
+        android:layout_width="400dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/tvSizeLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnGuiDanhGia" />
+
+    <TextView
+        android:id="@+id/tvSizeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Chọn size"
+        android:textColor="#E61818"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/rvbl"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/rgSize"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tvSizeLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <RadioButton
+            android:id="@+id/nho"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:text="Nhỏ"
+            android:textColor="#333333"
+            android:textSize="12sp"
             android:checked="true" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_medium"
+        <RadioButton
+            android:id="@+id/trung"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Vừa" />
+            android:layout_marginEnd="8dp"
+            android:text="Trung"
+            android:textColor="#333333"
+            android:textSize="12sp" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_large"
+        <RadioButton
+            android:id="@+id/lon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lớn" />
-    </com.google.android.material.chip.ChipGroup>
+            android:text="Lớn"
+            android:textColor="#333333"
+            android:textSize="12sp" />
+    </RadioGroup>
 
-    <!-- 7. Giá hiện tại (TextView) -->
-    <TextView
-        android:id="@+id/tvPriceCurrent"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="100.000đ"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/chipGroupSize"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toStartOf="@id/btnAddToCart"
-        app:layout_constraintBottom_toBottomOf="@id/btnAddToCart" />
-
-    <!-- 8. Nút “Thêm vào giỏ hàng” -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnAddToCart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Thêm vào giỏ hàng"
-        app:icon="@drawable/baseline_add_shopping_cart_24"
-        app:iconPadding="8dp"
-        app:layout_constraintTop_toBottomOf="@id/chipGroupSize"
+    <LinearLayout
+        android:layout_width="405dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rgSize"
+        app:layout_constraintVertical_bias="0.529">
+
+        <TextView
+            android:id="@+id/tvPrice"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="120.000đ"
+            android:textColor="#524949"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/themvohang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#3B84BD"
+            android:elevation="4dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="Thêm vào giỏ hàng"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

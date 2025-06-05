@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -154,7 +155,12 @@ public class HomeFragment extends Fragment {
         );
 
         locsp = new ArrayList<>(tatca);
-        sanPhamAdapter = new SanPhamAdapter(requireContext(),locsp);
+        sanPhamAdapter = new SanPhamAdapter(requireContext(), locsp, sanPham -> {
+            // Xử lý sự kiện nhấn vào sản phẩm
+            Intent intent = new Intent(requireContext(), Trchitietsp.class);
+            intent.putExtra("sanPham", sanPham);
+            startActivity(intent);
+        });
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         recyclerView.setAdapter(sanPhamAdapter);
     }
