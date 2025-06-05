@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -101,25 +102,35 @@ public class HomeFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
+
             public void afterTextChanged(Editable s) {
-                String keyword = Normalizer.normalize(s.toString(), Normalizer.Form.NFD)
-                        .replaceAll("\\p{M}", "")
-                        .toLowerCase();
-                Log.d("TimKiem", "Từ khóa: " + keyword);
-                locsp.clear();
-                for (SanPham sp : tatca) {
-                    String tenSanPham = Normalizer.normalize(sp.getTen(), Normalizer.Form.NFD)
-                            .replaceAll("\\p{M}", "")
-                            .toLowerCase();
-                    if (tenSanPham.contains(keyword)) {
-                        locsp.add(sp);
-                    }
-                }
-                Log.d("TimKiem", "Số sản phẩm tìm thấy: " + locsp.size());
-                sanPhamAdapter.notifyDataSetChanged();
+               String sanpham=s.toString().trim();
+               if(sanpham.isEmpty()){
+                   locsp.clear();
+                   sanPhamAdapter.notifyDataSetChanged();
+               }
+                else {
+                    Timkiemsp(sanpham);
+               }
             }
         });
     }
+    private void Timkiemsp(String query) {
+        query = Normalizer.normalize(query, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .toLowerCase();
+        locsp.clear();
+        for (SanPham sp : tatca) {
+            String tenSanPham = Normalizer.normalize(sp.getTen() != null ? sp.getTen() : "", Normalizer.Form.NFD)
+                    .replaceAll("\\p{M}", "")
+                    .toLowerCase();
+            if (tenSanPham.contains(query)) {
+                locsp.add(sp);
+            }
+        }
+        sanPhamAdapter.notifyDataSetChanged();
+    }
+
 
     private void setupBoLoc() {
         boloc.setOnClickListener(v -> {
@@ -144,21 +155,28 @@ public class HomeFragment extends Fragment {
         );
 
         locsp = new ArrayList<>(tatca);
-        sanPhamAdapter = new SanPhamAdapter(locsp);
+        sanPhamAdapter = new SanPhamAdapter(requireContext(), locsp, sanPham -> {
+            // Xử lý sự kiện nhấn vào sản phẩm
+            Intent intent = new Intent(requireContext(), Trchitietsp.class);
+            intent.putExtra("sanPham", sanPham);
+            startActivity(intent);
+        });
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         recyclerView.setAdapter(sanPhamAdapter);
     }
     private void filterByCategory(String category) {
+        Log.d("BoLoc", "Lọc theo: " + category);
         locsp.clear();
         if (category.equals("Tất cả")) {
             locsp.addAll(tatca);
         } else {
             for (SanPham p : tatca) {
-                if (p.getCateri().equalsIgnoreCase(category)) {
+                if (p.getCateri() != null && p.getCateri().equalsIgnoreCase(category)) {
                     locsp.add(p);
                 }
             }
         }
+        Log.d("BoLoc", "Số sản phẩm sau lọc: " + locsp.size());
         sanPhamAdapter.notifyDataSetChanged();
     }
 }
