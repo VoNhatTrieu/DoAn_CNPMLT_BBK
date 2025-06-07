@@ -45,7 +45,7 @@ public class SanPhamAdapter extends RecyclerView.Adapter<SanPhamAdapter.ProductV
         SanPham sp = sanPhamList.get(position);
         holder.tvTen.setText(sp.getTen());
         holder.tvGia.setText(String.format("%,dđ", sp.getGia()));
-        holder.ivAnh.setImageResource(sp.getAnh());
+        holder.ivAnh.setImageResource(sp.getAnh()); // Sửa lỗi sp.get()
 
         // Xử lý sự kiện nhấn qua callback
         holder.itemView.setOnClickListener(v -> {

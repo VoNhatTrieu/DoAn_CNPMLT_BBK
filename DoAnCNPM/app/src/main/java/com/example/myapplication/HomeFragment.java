@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,41 +32,41 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
-
 public class HomeFragment extends Fragment {
-    private  ViewPager2 viewPager2;
+    private ViewPager2 viewPager2;
     private TabLayout tabLayout;
     private EditText timkiem;
     private ImageView boloc;
-    private  RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private List<SanPham> tatca;
-    private  List<SanPham>locsp;
+    private List<SanPham> locsp;
     private Runnable truotbanner;
-    private  SanPhamAdapter sanPhamAdapter;
+    private SanPhamAdapter sanPhamAdapter;
 
     private Handler bannerHandler = new Handler(Looper.getMainLooper());
-    private  int vitri=0;
+    private int vitri = 0;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        viewPager2=view.findViewById(R.id.Banner);
-        tabLayout=view.findViewById(R.id.chamtron);
-        recyclerView=view.findViewById(R.id.dsSP);
-        timkiem=view.findViewById(R.id.edTimKiem);
-        boloc=view.findViewById(R.id.igBoLoc);
+        viewPager2 = view.findViewById(R.id.Banner);
+        tabLayout = view.findViewById(R.id.chamtron);
+        recyclerView = view.findViewById(R.id.dsSP);
+        timkiem = view.findViewById(R.id.edTimKiem);
+        boloc = view.findViewById(R.id.igBoLoc);
         setupBanner();
         setupBoLoc();
         setupTimKiem();
         setupProductList();
         return view;
     }
-    void setupBanner(){
-        List<Integer>qc= Arrays.asList(R.drawable.ban1,R.drawable.ban2,R.drawable.ban3,R.drawable.ban4);
-        Banner banner=new Banner(qc);
+
+    void setupBanner() {
+        List<Integer> qc = Arrays.asList(R.drawable.ban1, R.drawable.ban2, R.drawable.ban3, R.drawable.ban4);
+        Banner banner = new Banner(qc);
         viewPager2.setAdapter(banner);
-        new TabLayoutMediator(tabLayout,viewPager2,(tab, position) ->{}).attach();
+        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {}).attach();
         truotbanner = () -> {
             if (banner.getItemCount() == 0) return;
 
@@ -93,6 +94,7 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
         bannerHandler.removeCallbacks(truotbanner);
     }
+
     private void setupTimKiem() {
         timkiem.addTextChangedListener(new TextWatcher() {
             @Override
@@ -102,19 +104,19 @@ public class HomeFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
-
             public void afterTextChanged(Editable s) {
-               String sanpham=s.toString().trim();
-               if(sanpham.isEmpty()){
-                   locsp.clear();
-                   sanPhamAdapter.notifyDataSetChanged();
-               }
-                else {
+                String sanpham = s.toString().trim();
+                if (sanpham.isEmpty()) {
+                    locsp.clear();
+                    locsp.addAll(tatca); // Khôi phục danh sách gốc
+                    sanPhamAdapter.notifyDataSetChanged();
+                } else {
                     Timkiemsp(sanpham);
-               }
+                }
             }
         });
     }
+
     private void Timkiemsp(String query) {
         query = Normalizer.normalize(query, Normalizer.Form.NFD)
                 .replaceAll("\\p{M}", "")
@@ -128,9 +130,11 @@ public class HomeFragment extends Fragment {
                 locsp.add(sp);
             }
         }
+        if (locsp.isEmpty()) {
+            Toast.makeText(requireContext(), "Không tìm thấy sản phẩm", Toast.LENGTH_SHORT).show();
+        }
         sanPhamAdapter.notifyDataSetChanged();
     }
-
 
     private void setupBoLoc() {
         boloc.setOnClickListener(v -> {
@@ -144,13 +148,14 @@ public class HomeFragment extends Fragment {
             builder.create().show();
         });
     }
+
     private void setupProductList() {
         tatca = Arrays.asList(
-                new SanPham("Bánh kem dâu", 120000, R.drawable.anh1,  "Kem"),
-                new SanPham("Bánh chocolate", 150000, R.drawable.ban1,  "Chocolate"),
-                new SanPham("Bánh tiramisu", 140000, R.drawable.ban2,  "Kem"),
+                new SanPham("Bánh kem dâu", 120000, R.drawable.anh1, "Kem"),
+                new SanPham("Bánh chocolate", 150000, R.drawable.ban1, "Chocolate"),
+                new SanPham("Bánh tiramisu", 140000, R.drawable.ban2, "Kem"),
                 new SanPham("Bánh matcha", 130000, R.drawable.ban3, "Trà xanh"),
-                 new SanPham("Bánh matcha", 130000, R.drawable.ban3, "Trà xanh"),
+                new SanPham("Bánh matcha", 130000, R.drawable.ban3, "Trà xanh"),
                 new SanPham("Bánh matcha", 130000, R.drawable.ban3, "Trà xanh")
         );
 
@@ -158,12 +163,13 @@ public class HomeFragment extends Fragment {
         sanPhamAdapter = new SanPhamAdapter(requireContext(), locsp, sanPham -> {
             // Xử lý sự kiện nhấn vào sản phẩm
             Intent intent = new Intent(requireContext(), Trchitietsp.class);
-            intent.putExtra("sanPham", sanPham);
+            intent.putExtra("sanPham", sanPham); // Không còn lỗi
             startActivity(intent);
         });
         recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), 2));
         recyclerView.setAdapter(sanPhamAdapter);
     }
+
     private void filterByCategory(String category) {
         Log.d("BoLoc", "Lọc theo: " + category);
         locsp.clear();
@@ -177,6 +183,9 @@ public class HomeFragment extends Fragment {
             }
         }
         Log.d("BoLoc", "Số sản phẩm sau lọc: " + locsp.size());
+        if (locsp.isEmpty()) {
+            Toast.makeText(requireContext(), "Không có sản phẩm trong danh mục này", Toast.LENGTH_SHORT).show();
+        }
         sanPhamAdapter.notifyDataSetChanged();
     }
 }

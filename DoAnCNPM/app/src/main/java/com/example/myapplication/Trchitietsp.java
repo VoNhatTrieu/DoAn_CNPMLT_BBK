@@ -13,6 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +36,7 @@ public class Trchitietsp extends AppCompatActivity {
     private RecyclerView bl;
     private List<xemchitiet> xct;
     private xctAdapter x;
+    private Button add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,7 @@ public class Trchitietsp extends AppCompatActivity {
         btnGuiDanhGia = findViewById(R.id.btnGuiDanhGia);
         bl = findViewById(R.id.rvbl);
         rgSize = findViewById(R.id.rgSize);
+        add=findViewById(R.id.themvohang);
 
         // Thiết lập RecyclerView
         bl.setLayoutManager(new LinearLayoutManager(this));
@@ -71,6 +76,7 @@ public class Trchitietsp extends AppCompatActivity {
         chitit.setText("Kem sữa tươi, dâu tây, đường, bột mì, trứng, vani.");
         gia.setText(String.format("%,dđ", nho));
 
+
         // Xử lý sự kiện nhấn nút back
         backIcon.setOnClickListener(v -> {
             Log.d("Trchitietsp", "Back button clicked, returning to previous Activity");
@@ -89,9 +95,20 @@ public class Trchitietsp extends AppCompatActivity {
         });
 
         // Thêm vào giỏ hàng
-        findViewById(R.id.themvohang).setOnClickListener(v -> {
-            Toast.makeText(this, "Đã thêm " + sanPham.getTen() + " vào giỏ hàng", Toast.LENGTH_SHORT).show();
+        add.setOnClickListener(v -> {
+            if(sanPham!=null){
+                ghmanager.getInstance().addToCart(sanPham);
+                Toast.makeText(this, "Đã thêm " + sanPham.getTen() + " vào giỏ hàng", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this,"Không thể thêm vào giỏ hàng",Toast.LENGTH_SHORT).show();
+            }
         });
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
 
         // Danh sách bình luận
         xct = new ArrayList<>();
