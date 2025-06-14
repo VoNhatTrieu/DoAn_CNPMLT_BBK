@@ -1,5 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <!-- Primary Colors -->
+    <color name="primary_color">#6C63FF</color>
+    <color name="primary_dark">#5A52D5</color>
+    <color name="primary_light">#8B85FF</color>
+
+    <!-- Secondary Colors -->
+    <color name="secondary_color">#FF6B9D</color>
+    <color name="secondary_dark">#E55A8A</color>
+    <color name="secondary_light">#FF8BB0</color>
+
+    <!-- Accent Colors -->
+    <color name="accent_color">#FF9F43</color>
+    <color name="accent_dark">#E8873A</color>
+    <color name="accent_light">#FFB366</color>
+
+    <!-- Background Colors -->
+    <color name="background_primary">#F8F9FA</color>
+    <color name="background_secondary">#FFFFFF</color>
+    <color name="background_card">#FFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#2D3436</color>
+    <color name="text_secondary">#636E72</color>
+    <color name="text_hint">#B2BEC3</color>
+
+    <!-- Status Colors -->
+    <color name="success">#00B894</color>
+    <color name="error">#E17055</color>
+    <color name="warning">#FDCB6E</color>
+    <color name="info">#74B9FF</color>
+
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#667EEA</color>
+    <color name="gradient_end">#764BA2</color>
+
+    <color name="gradient_register_start">#FF9A9E</color>
+    <color name="gradient_register_end">#FECFEF</color>
+
+    <color name="gradient_forgot_start">#FFB75E</color>
+    <color name="gradient_forgot_end">#ED8D7C</color>
+
+    <!-- Transparent Colors -->
+    <color name="black_50">#80000000</color>
+    <color name="white_50">#80FFFFFF</color>
+    <color name="overlay">#40000000</color>
 </resources>

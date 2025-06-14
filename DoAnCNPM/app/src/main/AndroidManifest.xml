@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.myapplication">
 
     <application
         android:allowBackup="true"
@@ -13,33 +14,14 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
-            android:name=".ThanhToanActivity"
+            android:name=".Profile.ThongtinNDActivity"
             android:exported="false" />
         <activity
-            android:name=".CartFragment"
-            android:exported="false"
-            android:theme="@style/Theme.MyApplication" />
-        <activity
-            android:name=".Trchitietsp"
+            android:name=".QuenMKActivity"
             android:exported="false" />
         <activity
-            android:name=".SanPhamAdapter"
-            android:exported="false"
-            tools:ignore="Instantiatable" />
-        <activity
-            android:name=".Banner"
-            android:exported="false"
-            tools:ignore="Instantiatable" />
-        <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".DangKiActivity"
             android:exported="false" />
-        <activity
-            android:name=".RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".HomeFragment"
-            android:exported="true"
-            tools:ignore="Instantiatable" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -49,6 +31,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ThanhToanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Trchitietsp"
+            android:exported="false" />
     </application>
 
 </manifest>

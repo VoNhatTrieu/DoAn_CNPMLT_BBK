@@ -74,7 +74,7 @@ public class CartFragment extends Fragment {
         }
         thanhtoan.setOnClickListener(v -> {
             if(!cartItems.isEmpty()){
-                Intent intent=new Intent(getActivity(),ThanhToanActivity.class);
+                Intent intent=new Intent(requireContext(),ThanhToanActivity.class);
                 startActivity(intent);
             }
             else {

@@ -36,9 +36,9 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_cart) {
                 selectedFragment = new CartFragment();
             }
-//            else if (id == R.id.nav_account) {
-//                selectedFragment = new TaiKhoanFragment();
-//            }
+            else if (id == R.id.nav_account) {
+                selectedFragment = new TaiKhoanFragment();
+            }
 
             if (selectedFragment != null) {
                 getSupportFragmentManager().beginTransaction()
