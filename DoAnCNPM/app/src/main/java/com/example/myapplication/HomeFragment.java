@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.myapplication.Yeuthich.DSYTActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -36,7 +37,7 @@ public class HomeFragment extends Fragment {
     private ViewPager2 viewPager2;
     private TabLayout tabLayout;
     private EditText timkiem;
-    private ImageView boloc;
+    private ImageView boloc,yeuthich;
     private RecyclerView recyclerView;
     private List<SanPham> tatca;
     private List<SanPham> locsp;
@@ -55,10 +56,12 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.dsSP);
         timkiem = view.findViewById(R.id.edTimKiem);
         boloc = view.findViewById(R.id.igBoLoc);
+        yeuthich=view.findViewById(R.id.igYeuThich);
         setupBanner();
         setupBoLoc();
         setupTimKiem();
         setupProductList();
+        Yeuthich();
         return view;
     }
 
@@ -116,7 +119,12 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
+    private  void Yeuthich(){
+        yeuthich.setOnClickListener(v -> {
+            Intent intent=new Intent(requireContext(), DSYTActivity.class);
+            startActivity(intent);
+        });
+    }
     private void Timkiemsp(String query) {
         query = Normalizer.normalize(query, Normalizer.Form.NFD)
                 .replaceAll("\\p{M}", "")

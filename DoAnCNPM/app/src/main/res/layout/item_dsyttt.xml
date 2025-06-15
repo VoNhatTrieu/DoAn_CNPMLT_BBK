@@ -17,13 +17,14 @@
             android:src="@drawable/ic_launcher_background"/>
 
         <ImageView
-            android:id="@+id/ivWishlist"
+            android:id="@+id/ivRemove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:layout_margin="8dp"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Yêu thích"
+
+            android:background="@drawable/yt"
+            android:contentDescription="Xóa khỏi yêu thích"
             android:padding="4dp"
             android:src="@drawable/baseline_favorite_border_24" />
 
