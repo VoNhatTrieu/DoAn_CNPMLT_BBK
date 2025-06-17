@@ -74,7 +74,10 @@ public class CartFragment extends Fragment {
         }
         thanhtoan.setOnClickListener(v -> {
             if(!cartItems.isEmpty()){
+                int tongtien=ghmanager.getInstance().tinhTong();
+                Log.d(TAG,"Tổng tiền"+tongtien);
                 Intent intent=new Intent(requireContext(),ThanhToanActivity.class);
+                intent.putExtra("TOTAL_AMOUNT",tongtien);
                 startActivity(intent);
             }
             else {

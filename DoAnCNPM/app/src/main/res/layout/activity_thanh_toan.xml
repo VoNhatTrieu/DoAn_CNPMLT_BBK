@@ -7,8 +7,7 @@
     android:background="#F5F5F5"
     android:padding="15dp">
 
-    <!-- Thông tin đơn hàng -->
-
+    <!-- Header -->
     <LinearLayout
         android:layout_width="394dp"
         android:layout_height="54dp"
@@ -31,6 +30,7 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <!-- Thông tin giao hàng -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -82,6 +82,7 @@
             android:textSize="16sp" />
     </LinearLayout>
 
+    <!-- Chi tiết thanh toán -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -94,86 +95,51 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chi tiết đơn hàng"
+            android:text="Chi tiết thanh toán"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_total_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+            android:layout_marginTop="8dp"
+            android:text="Tổng tiền: 0đ"
+            android:textColor="#000000"
+            android:textSize="16sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Bánh kem dâu"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2 x 120.000đ = 240.000đ"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_deposit_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+            android:layout_marginTop="4dp"
+            android:text="Tiền cọc (50%): 0đ"
+            android:textColor="#FE2C55"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Phí vận chuyển"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10.000đ"
-                android:textColor="#000000"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/tv_remaining_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+            android:layout_marginTop="4dp"
+            android:text="Còn lại (thanh toán khi nhận hàng): 0đ"
+            android:textColor="#666666"
+            android:textSize="14sp" />
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Tổng cộng"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="250.000đ"
-                android:textColor="#FE2C55"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="#FFF9C4"
+            android:padding="8dp"
+            android:text="💡 Bạn cần thanh toán trước 50% . Số tiền còn lại sẽ thanh toán khi nhận hàng."
+            android:textColor="#E65100"
+            android:textSize="12sp" />
     </LinearLayout>
 
     <!-- Phương thức thanh toán -->
-
-    <!-- Button container -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -186,7 +152,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Phương thức thanh toán"
+            android:text="Phương thức thanh toán cọc"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -226,6 +192,7 @@
         </RadioGroup>
     </LinearLayout>
 
+    <!-- Button thanh toán -->
     <LinearLayout
         android:layout_width="378dp"
         android:layout_height="wrap_content"
@@ -239,7 +206,7 @@
             android:background="@drawable/buttontiktok"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
-            android:text="Xác nhận thanh toán"
+            android:text="Thanh toán cọc"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:textStyle="bold" />

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="160dp"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="8dp">
 
@@ -22,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top|end"
             android:layout_margin="8dp"
-
+            app:tint="#E74C3C"
             android:background="@drawable/yt"
             android:contentDescription="Xóa khỏi yêu thích"
             android:padding="4dp"

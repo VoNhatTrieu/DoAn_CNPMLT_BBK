@@ -35,4 +35,14 @@ public class ghmanager {
     public void addToCart(SanPham item) {
         cartItems.add(item);
     }
+    public  void cleatCart(){
+        cartItems.clear();
+    }
+    public  int tinhTong(){
+        int sum=0;
+        for (SanPham sanPham:cartItems){
+            sum+=sanPham.getGia()*sanPham.getSoLuong();
+        }
+        return sum;
+    }
 }
