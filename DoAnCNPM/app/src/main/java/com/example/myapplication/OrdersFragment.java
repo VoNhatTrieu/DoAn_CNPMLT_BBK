@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.myapplication.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class OrdersFragment extends Fragment {
     public static final int REQUEST_CODE_PICK_IMAGE = 1;
 
     public TextInputEditText etTenBanh, etMoTa, etKichCo, etNgayGiao, etNguoiNhan, etSdt;
-    public Spinner spinnerLoaiBanh;
+    public MaterialAutoCompleteTextView spinnerLoaiBanh;
     public ShapeableImageView imgAnhMau;
     public Uri selectedImageUri;
 
@@ -49,12 +50,12 @@ public class OrdersFragment extends Fragment {
 
         Button btnChonAnh = view.findViewById(R.id.btn_chon_anh);
         Button btnDatBanh = view.findViewById(R.id.btn_dat_banh);
-        ImageView btnBack = view.findViewById(R.id.btn_back);
 
-        // Khởi tạo spinner
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
-                R.array.loai_banh_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Khởi tạo dropdown cho loại bánh
+        String[] loaiBanhArray = getResources().getStringArray(R.array.loai_banh_array);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, loaiBanhArray);
         spinnerLoaiBanh.setAdapter(adapter);
 
         // Chọn ngày
@@ -65,22 +66,6 @@ public class OrdersFragment extends Fragment {
 
         // Gửi yêu cầu
         btnDatBanh.setOnClickListener(v -> submitForm());
-
-        // Quay lại
-        btnBack.setOnClickListener(v -> {
-            // Điều hướng về HomeFragment
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, new HomeFragment())
-                    .commit();
-
-            // Đổi mục được chọn trong BottomNavigationView
-            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.bottom_navigation);
-            bottomNavigationView.setSelectedItemId(R.id.nav_home); // nav_home là id của item "Trang chủ"
-        });
-
-
-
         return view;
     }
 
@@ -94,6 +79,9 @@ public class OrdersFragment extends Fragment {
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
+
+        // Đặt ngày tối thiểu là ngày hiện tại
+        dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
         dialog.show();
     }
 
@@ -112,6 +100,7 @@ public class OrdersFragment extends Fragment {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver(), selectedImageUri);
                 imgAnhMau.setImageBitmap(bitmap);
                 imgAnhMau.setAlpha(1.0f); // Bỏ mờ ảnh mặc định
+                imgAnhMau.setPadding(0, 0, 0, 0); // Bỏ padding khi có ảnh
             } catch (IOException e) {
                 e.printStackTrace();
                 Toast.makeText(getContext(), "Không thể chọn ảnh", Toast.LENGTH_SHORT).show();
@@ -126,14 +115,77 @@ public class OrdersFragment extends Fragment {
         String ngayGiao = etNgayGiao.getText().toString().trim();
         String nguoiNhan = etNguoiNhan.getText().toString().trim();
         String sdt = etSdt.getText().toString().trim();
-        String loaiBanh = spinnerLoaiBanh.getSelectedItem().toString();
+        String loaiBanh = spinnerLoaiBanh.getText().toString().trim();
 
-        if (tenBanh.isEmpty() || moTa.isEmpty() || kichCo.isEmpty() || ngayGiao.isEmpty() || nguoiNhan.isEmpty() || sdt.isEmpty()) {
-            Toast.makeText(getContext(), "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+        // Validation
+        if (tenBanh.isEmpty()) {
+            etTenBanh.setError("Vui lòng nhập tên bánh");
+            etTenBanh.requestFocus();
             return;
         }
 
-        // Gửi yêu cầu (ở đây chỉ hiển thị thông báo mẫu)
-        Toast.makeText(getContext(), "Đã gửi yêu cầu đặt bánh!", Toast.LENGTH_LONG).show();
+        if (loaiBanh.isEmpty()) {
+            spinnerLoaiBanh.setError("Vui lòng chọn loại bánh");
+            spinnerLoaiBanh.requestFocus();
+            return;
+        }
+
+        if (moTa.isEmpty()) {
+            etMoTa.setError("Vui lòng nhập mô tả");
+            etMoTa.requestFocus();
+            return;
+        }
+
+        if (kichCo.isEmpty()) {
+            etKichCo.setError("Vui lòng nhập kích thước");
+            etKichCo.requestFocus();
+            return;
+        }
+
+        if (ngayGiao.isEmpty()) {
+            etNgayGiao.setError("Vui lòng chọn ngày giao");
+            etNgayGiao.requestFocus();
+            return;
+        }
+
+        if (nguoiNhan.isEmpty()) {
+            etNguoiNhan.setError("Vui lòng nhập tên người nhận");
+            etNguoiNhan.requestFocus();
+            return;
+        }
+
+        if (sdt.isEmpty()) {
+            etSdt.setError("Vui lòng nhập số điện thoại");
+            etSdt.requestFocus();
+            return;
+        }
+
+        if (sdt.length() < 9 || sdt.length() > 11) {
+            etSdt.setError("Số điện thoại không hợp lệ");
+            etSdt.requestFocus();
+            return;
+        }
+
+        // Tạo thông báo thành công với animation
+        Toast.makeText(getContext(), "Đã gửi yêu cầu đặt bánh thành công!\nChúng tôi sẽ liên hệ với bạn sớm nhất có thể.", Toast.LENGTH_LONG).show();
+
+        // Reset form sau khi gửi thành công
+        resetForm();
+    }
+
+    private void resetForm() {
+        etTenBanh.setText("");
+        etMoTa.setText("");
+        etKichCo.setText("");
+        etNgayGiao.setText("");
+        etNguoiNhan.setText("");
+        etSdt.setText("");
+        spinnerLoaiBanh.setText("");
+
+        // Reset image
+        imgAnhMau.setImageResource(android.R.drawable.ic_menu_gallery);
+        imgAnhMau.setAlpha(0.4f);
+        imgAnhMau.setPadding(40, 40, 40, 40);
+        selectedImageUri = null;
     }
 }

@@ -1,34 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:elevation="4dp">
+    android:layout_margin="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="16dp"
+        android:gravity="center_vertical">
 
         <CheckBox
             android:id="@+id/cbCheck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical" />
+            android:layout_marginEnd="12dp"
+            android:buttonTint="#FF6B35" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/item_image1"
-            android:layout_width="92dp"
-            android:layout_height="105dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/anh1" />
+            android:src="@drawable/anh1"/>
 
         <LinearLayout
-            android:layout_width="248dp"
-            android:layout_height="105dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -37,57 +43,68 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Tên sản phẩm"
-                android:textColor="#333333"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textColor="#1A1A1A"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/item_price1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:text="120.000đ"
-                android:textColor="#E61818"
-                android:textSize="14sp" />
+                android:textColor="#FF6B35"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-            <!-- Nút tăng giảm nằm dưới giá tiền -->
+            <!-- Quantity Control with Modern Design -->
             <LinearLayout
-                android:layout_width="168dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_Tru"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="4dp"
-                    android:backgroundTint="#E53935"
-                    android:text="-"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp" />
+                    style="@style/Widget.Material3.Button.IconButton.Filled"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:text="−"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    app:backgroundTint="#FF6B35"
+                    app:cornerRadius="12dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp" />
 
                 <TextView
                     android:id="@+id/item_quantity"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="56dp"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="12dp"
                     android:gravity="center"
                     android:text="1"
                     android:textSize="18sp"
-                    android:textColor="#000000"
-                    android:background="#EEEEEE"
-                    android:layout_marginEnd="4dp" />
+                    android:textColor="#1A1A1A"
+                    android:textStyle="bold"
+                    android:background="@drawable/quantyy" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_Tang"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:backgroundTint="#43A047"
+                    style="@style/Widget.Material3.Button.IconButton.Filled"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:text="+"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp" />
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    app:backgroundTint="#4CAF50"
+                    app:cornerRadius="12dp"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp" />
 
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
