@@ -1,0 +1,29 @@
+  {
+  "project_info": {
+    "project_number": "831869307656",
+    "project_id": "doanbbk",
+    "storage_bucket": "doanbbk.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831869307656:android:fcc1afb71a8b3483df7abd",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCM7tIqqJAmDv_4EKkm7292-70Y_YwiJRg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
