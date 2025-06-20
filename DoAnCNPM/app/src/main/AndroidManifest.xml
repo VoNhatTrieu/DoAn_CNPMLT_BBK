@@ -14,6 +14,12 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
+            android:name=".Profile.ThongTinNDActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DangNhapActivity"
+            android:exported="false" />
+        <activity
             android:name=".MHSpalsh.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -25,9 +31,7 @@
         <activity
             android:name=".Yeuthich.DSYTActivity"
             android:exported="false" />
-        <activity
-            android:name=".Profile.ThongtinNDActivity"
-            android:exported="false" />
+
         <activity
             android:name=".QuenMKActivity"
             android:exported="false" />
@@ -36,9 +40,7 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".ThanhToanActivity"
             android:exported="false" />

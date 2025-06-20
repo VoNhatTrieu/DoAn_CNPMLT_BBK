@@ -10,12 +10,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.myapplication.R;
 
-public class ThongtinNDActivity extends AppCompatActivity {
+public class ThongTinNDActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_thongtin_ndactivity);
+
+        setContentView(R.layout.activity_thong_tin_ndactivity);
 
     }
 }

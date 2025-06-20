@@ -11,6 +11,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="default_web_client_id">831869307656-dkkp86mat0j41fmd8mr4cnj1j3q7ssku.apps.googleusercontent.com</string>
     <string name="loading_text">Đang tải...</string>
     <string name="app_subtitle">Ngọt ngào từng khoảnh khắc</string>
     <string name="lorem_ipsum">

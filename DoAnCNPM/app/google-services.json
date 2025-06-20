@@ -1,6 +1,7 @@
-  {
+{
   "project_info": {
     "project_number": "831869307656",
+    "firebase_url": "https://doanbbk-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "doanbbk",
     "storage_bucket": "doanbbk.firebasestorage.app"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.example.myapplication"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "831869307656-97i56b88jfmsn99ui3m9middg8q7fn16.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.myapplication",
+            "certificate_hash": "457eaa589da8b3a087b92c1ef090a7a0234c21b9"
+          }
+        },
+        {
+          "client_id": "831869307656-dkkp86mat0j41fmd8mr4cnj1j3q7ssku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCM7tIqqJAmDv_4EKkm7292-70Y_YwiJRg"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831869307656-dkkp86mat0j41fmd8mr4cnj1j3q7ssku.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
