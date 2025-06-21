@@ -10,9 +10,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,10 +22,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // Hiển thị Fragment đầu tiên mặc định
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container,new HomeFragment())
-                .commit();
+
+        // Hiển thị Fragment mặc định
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new HomeFragment())
+                    .commit();
+        }
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
@@ -35,8 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new OrdersFragment();
             } else if (id == R.id.nav_cart) {
                 selectedFragment = new CartFragment();
-            }
-            else if (id == R.id.nav_account) {
+            } else if (id == R.id.nav_account) {
                 selectedFragment = new TaiKhoanFragment();
             }
 

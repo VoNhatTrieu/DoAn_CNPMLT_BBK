@@ -9,10 +9,21 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.app.AlertDialog;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.myapplication.Profile.ThongTinNDActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class TaiKhoanFragment extends Fragment {
 
@@ -21,8 +32,16 @@ public class TaiKhoanFragment extends Fragment {
     private Button btnLogin, btnRegister;
     private LinearLayout llSupport, llAbout;
 
-    // Giả lập trạng thái đăng nhập (false = chưa đăng nhập)
-    private boolean isLoggedIn = false;
+    // Profile menu items (when logged in)
+    private LinearLayout llProfileMenu;
+    private LinearLayout llFavorites, llOrderHistory, llDeliveryAddress,
+            llUpdateInfo, llChangePassword, llNotifications,
+            llContactSupport, llLogout;
+
+    // Firebase
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    private FirebaseUser currentUser;
 
     public TaiKhoanFragment() {
         // Constructor mặc định
@@ -36,7 +55,23 @@ public class TaiKhoanFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_tai_khoan, container, false);
 
+        // Khởi tạo Firebase
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         // Ánh xạ view
+        initViews(view);
+
+        // Kiểm tra trạng thái đăng nhập
+        checkLoginStatus();
+
+        // Setup click listeners
+        setupClickListeners();
+
+        return view;
+    }
+
+    private void initViews(View view) {
         ivUserAvatar = view.findViewById(R.id.iv_user_avatar);
         tvWelcomeTitle = view.findViewById(R.id.tv_welcome_title);
         tvWelcomeSubtitle = view.findViewById(R.id.tv_welcome_subtitle);
@@ -45,42 +80,208 @@ public class TaiKhoanFragment extends Fragment {
         llSupport = view.findViewById(R.id.ll_support);
         llAbout = view.findViewById(R.id.ll_about);
 
-        // Kiểm tra trạng thái đăng nhập giả lập
-        if (isLoggedIn) {
-            // Nếu đã đăng nhập
-            tvWelcomeTitle.setText("Xin chào, Người dùng!");
-            tvWelcomeSubtitle.setText("Bạn đã đăng nhập thành công.");
-            btnLogin.setVisibility(View.GONE);
-            btnRegister.setVisibility(View.GONE);
-        } else {
-            // Nếu chưa đăng nhập
-            tvWelcomeTitle.setText("Chào mừng đến với ứng dụng");
-            tvWelcomeSubtitle.setText("Đăng nhập để trải nghiệm đầy đủ tính năng");
-            btnLogin.setVisibility(View.VISIBLE);
-            btnRegister.setVisibility(View.VISIBLE);
-        }
+        // Profile menu items (you'll need to add these to your XML)
+        llProfileMenu = view.findViewById(R.id.ll_profile_menu);
+        llFavorites = view.findViewById(R.id.ll_favorites);
+        llOrderHistory = view.findViewById(R.id.ll_order_history);
+        llDeliveryAddress = view.findViewById(R.id.ll_delivery_address);
+        llUpdateInfo = view.findViewById(R.id.ll_update_info);
+        llChangePassword = view.findViewById(R.id.ll_change_password);
+        llNotifications = view.findViewById(R.id.ll_notifications);
+        llContactSupport = view.findViewById(R.id.ll_contact_support);
+        llLogout = view.findViewById(R.id.ll_logout);
+    }
 
+    private void setupClickListeners() {
         // Nút đăng nhập
         btnLogin.setOnClickListener(v -> {
-
-             startActivity(new Intent(getActivity(), DangNhapActivity.class));
+            startActivity(new Intent(getActivity(), DangNhapActivity.class));
         });
 
         // Nút đăng ký
         btnRegister.setOnClickListener(v -> {
-             startActivity(new Intent(getActivity(), DangKiActivity.class));
+            startActivity(new Intent(getActivity(), DangKiActivity.class));
         });
 
         // Hỗ trợ khách hàng
         llSupport.setOnClickListener(v -> {
-            // showToast("Đang phát triển chức năng hỗ trợ");
+            showSupportDialog();
         });
 
         // Về chúng tôi
         llAbout.setOnClickListener(v -> {
-            // showToast("Ứng dụng bán bánh kem - Phiên bản demo");
+            Toast.makeText(getContext(), "Ứng dụng bán bánh kem - Phiên bản demo", Toast.LENGTH_SHORT).show();
         });
 
-        return view;
+        // Profile menu click listeners
+        if (llFavorites != null) {
+            llFavorites.setOnClickListener(v -> {
+                Toast.makeText(getContext(), "Chức năng Bánh yêu thích đang phát triển", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (llOrderHistory != null) {
+            llOrderHistory.setOnClickListener(v -> {
+                Toast.makeText(getContext(), "Chức năng Lịch sử đơn hàng đang phát triển", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (llDeliveryAddress != null) {
+            llDeliveryAddress.setOnClickListener(v -> {
+                Toast.makeText(getContext(), "Chức năng Địa chỉ giao hàng đang phát triển", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (llUpdateInfo != null) {
+            llUpdateInfo.setOnClickListener(v -> {
+                Toast.makeText(getContext(), "Chức năng Cập nhật thông tin đang phát triển", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (llChangePassword != null) {
+            llChangePassword.setOnClickListener(v -> {
+                Toast.makeText(getContext(), "Chức năng Đổi mật khẩu đang phát triển", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (llNotifications != null) {
+            llNotifications.setOnClickListener(v -> {
+                Toast.makeText(getContext(), "Chức năng Thông báo đang phát triển", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        if (llContactSupport != null) {
+            llContactSupport.setOnClickListener(v -> {
+                showSupportDialog();
+            });
+        }
+
+        if (llLogout != null) {
+            llLogout.setOnClickListener(v -> {
+                showLogoutDialog();
+            });
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Kiểm tra lại trạng thái đăng nhập khi fragment được hiển thị lại
+        checkLoginStatus();
+    }
+
+    private void checkLoginStatus() {
+        currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            // Người dùng đã đăng nhập - hiển thị profile interface
+            showProfileInterface();
+        } else {
+            // Người dùng chưa đăng nhập - hiển thị giao diện đăng nhập
+            showLoginInterface();
+        }
+    }
+
+    private void showProfileInterface() {
+        // Lấy thông tin người dùng từ Firebase Database
+        String userId = currentUser.getUid();
+        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String userName = "";
+                String userEmail = currentUser.getEmail();
+
+                if (dataSnapshot.exists()) {
+                    userName = dataSnapshot.child("name").getValue(String.class);
+                }
+
+                // Hiển thị thông tin người dùng
+                if (userName != null && !userName.isEmpty()) {
+                    tvWelcomeTitle.setText("Xin chào, " + userName);
+                } else {
+                    tvWelcomeTitle.setText("Xin chào!");
+                }
+
+                tvWelcomeSubtitle.setText(userEmail);
+
+                // Ẩn nút đăng nhập/đăng ký
+                btnLogin.setVisibility(View.GONE);
+                btnRegister.setVisibility(View.GONE);
+
+                // Hiển thị menu profile
+                if (llProfileMenu != null) {
+                    llProfileMenu.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Nếu không lấy được thông tin từ database, vẫn hiển thị interface
+                tvWelcomeTitle.setText("Xin chào!");
+                tvWelcomeSubtitle.setText(currentUser.getEmail());
+                btnLogin.setVisibility(View.GONE);
+                btnRegister.setVisibility(View.GONE);
+                if (llProfileMenu != null) {
+                    llProfileMenu.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    private void showLoginInterface() {
+        // Hiển thị giao diện đăng nhập
+        tvWelcomeTitle.setText("Chào mừng đến với ứng dụng");
+        tvWelcomeSubtitle.setText("Đăng nhập để trải nghiệm đầy đủ tính năng");
+        btnLogin.setVisibility(View.VISIBLE);
+        btnRegister.setVisibility(View.VISIBLE);
+
+        // Ẩn menu profile
+        if (llProfileMenu != null) {
+            llProfileMenu.setVisibility(View.GONE);
+        }
+    }
+
+    private void showSupportDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Liên hệ hỗ trợ")
+                .setMessage("Bạn có thể liên hệ với chúng tôi qua:\n\n" +
+                        "📧 Email: support@bakery.com\n" +
+                        "📞 Hotline: 1900-xxxx\n" +
+                        "🕐 Thời gian: 8:00 - 22:00 hàng ngày")
+                .setPositiveButton("Đóng", null)
+                .setNeutralButton("Gọi hotline", (dialog, which) -> {
+                    Toast.makeText(getContext(), "Tính năng gọi điện đang phát triển", Toast.LENGTH_SHORT).show();
+                })
+                .show();
+    }
+
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Đăng xuất")
+                .setMessage("Bạn có chắc chắn muốn đăng xuất không?")
+                .setPositiveButton("Đăng xuất", (dialog, which) -> {
+                    performLogout();
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void performLogout() {
+        // Đăng xuất Firebase
+        mAuth.signOut();
+
+        // Xóa thông tin đăng nhập đã lưu
+        if (getActivity() != null) {
+            getActivity().getSharedPreferences("LoginPrefs", getActivity().MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("remember", false)
+                    .remove("email")
+                    .apply();
+        }
+
+        Toast.makeText(getContext(), "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
+
+        // Cập nhật giao diện
+        checkLoginStatus();
     }
 }

@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.myapplication.Profile.ThongTinNDActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -23,8 +22,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.HashMap;
 import java.util.Map;
+
 public class DangNhapActivity extends AppCompatActivity {
     private static final String TAG = "DangNhapActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -37,7 +38,6 @@ public class DangNhapActivity extends AppCompatActivity {
     private MaterialButton login, gg, fb;
     private TextView qmk, taotk;
 
-    // SharedPreferences keys
     private static final String PREF_NAME = "LoginPrefs";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_REMEMBER = "remember";
@@ -46,8 +46,8 @@ public class DangNhapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dang_nhap);
-        mAuth=FirebaseAuth.getInstance();
-        mDatabase=FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -56,13 +56,8 @@ public class DangNhapActivity extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // Khởi tạo view
         initViews();
-
-        // Thiết lập click listeners
         setupClickListeners();
-
-        // Tải thông tin đã lưu
         loadSavedLoginInfo();
     }
 
@@ -79,40 +74,27 @@ public class DangNhapActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // Nút quay lại
         btback.setOnClickListener(v -> onBackPressed());
-
-        // Nút đăng nhập
         login.setOnClickListener(v -> Login());
-
-        // Chuyển sang màn hình Quên mật khẩu
         qmk.setOnClickListener(v -> {
             Intent intent = new Intent(this, QuenMKActivity.class);
             startActivity(intent);
         });
-
-        // Chuyển sang màn hình Tạo tài khoản
         taotk.setOnClickListener(v -> {
             Intent intent = new Intent(this, DangKiActivity.class);
             startActivity(intent);
         });
-
-        // Đăng nhập Google
-        gg.setOnClickListener(v ->DangNhapGG());
-
-        // Đăng nhập Facebook
+        gg.setOnClickListener(v -> DangNhapGG());
         fb.setOnClickListener(v -> {
-            // TODO: Implement Facebook Login
             Toast.makeText(this, "Tính năng đăng nhập Facebook đang phát triển", Toast.LENGTH_SHORT).show();
         });
     }
 
-    // Đăng nhập bằng gg
-    private void DangNhapGG(){
-        Intent intent=mGoogleSignInClient.getSignInIntent();
+    private void DangNhapGG() {
+        Intent intent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(intent, RC_SIGN_IN);
     }
-    // Xử lý đăng nhập
+
     private void Login() {
         String Email = email.getText() != null ? email.getText().toString().trim() : "";
         String Pw = password.getText() != null ? password.getText().toString().trim() : "";
@@ -121,92 +103,73 @@ public class DangNhapActivity extends AppCompatActivity {
             return;
         }
 
-        // Giả lập đăng nhập thành công
-        Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-mAuth.signInWithEmailAndPassword(Email,Pw)
-        .addOnCompleteListener(this,task ->{
-            login.setEnabled(true);
-            login.setText("Đăng nhập");
-            if(task.isSuccessful()){
-                FirebaseUser user=mAuth.getCurrentUser();
-                // Lưu thông tin nếu chọn "Nhớ"
-                if (nho.isChecked()) {
-                    saveLoginInfo(Email);
-                } else {
-                    clearSavedLoginInfo();
-                }
-                Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                navigateToProfile(user);
-            } else {
-                Toast.makeText(this, getErrorMessage(task.getException()), Toast.LENGTH_SHORT).show();
-            }
-        });
+        mAuth.signInWithEmailAndPassword(Email, Pw)
+                .addOnCompleteListener(this, task -> {
+                    login.setEnabled(true);
+                    login.setText("Đăng nhập");
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (nho.isChecked()) {
+                            saveLoginInfo(Email);
+                        } else {
+                            clearSavedLoginInfo();
+                        }
+                        navigateToProfile(user);
+                    } else {
+                        Toast.makeText(this, getErrorMessage(task.getException()), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
-    private String getErrorMessage(Exception exception){
-        if(exception==null){
-            return "Đăng nhập thất bại";
-        }
-        String err=exception.getMessage();
-        if(err!=null){
-            if(err.contains("WRONG_PASSWORD")){
-                return "Mật khẩu không đúng";
-            }
-            if(err.contains("INVALID_EMAIL")){
-                return "Email không đúng";
-            }
-            if(err.contains("USER_NOT_FOUND")){
-                return "Tài khoản không tồn tại";
-            }
-            if(err.contains("USER_DISABLED")){
-                return "Tài khoản đã bị vô hiệu hóa";
-            }
-            if(err.contains("TOO_MANY_REQUESTS")){
-                return "Quá nhiều lần đăng nhập";
-            }
 
+    private String getErrorMessage(Exception exception) {
+        if (exception == null) return "Đăng nhập thất bại";
+        String err = exception.getMessage();
+        if (err != null) {
+            if (err.contains("WRONG_PASSWORD")) return "Mật khẩu không đúng";
+            if (err.contains("INVALID_EMAIL")) return "Email không đúng";
+            if (err.contains("USER_NOT_FOUND")) return "Tài khoản không tồn tại";
+            if (err.contains("USER_DISABLED")) return "Tài khoản đã bị vô hiệu hóa";
+            if (err.contains("TOO_MANY_REQUESTS")) return "Quá nhiều lần đăng nhập";
         }
-        return"Đăng nhập thất bại. Vui lòng thử lại sao";
+        return "Đăng nhập thất bại. Vui lòng thử lại sau";
     }
+
     private void navigateToProfile(FirebaseUser user) {
-       if (user != null) {
-           Intent intent=new Intent(this,com.example.myapplication.Profile.ThongTinNDActivity.class);
-           intent.putExtra("USER_EMAIL", user.getEmail());
-           intent.putExtra("USER_NAME", user.getDisplayName());
-           intent.putExtra("USER_UID", user.getUid());
-           startActivity(intent);
-           finish();
-       }
+        if (user != null) {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("USER_EMAIL", user.getEmail());
+            intent.putExtra("USER_NAME", user.getDisplayName());
+            intent.putExtra("USER_UID", user.getUid());
+            intent.putExtra("SELECTED_TAB", R.id.nav_account); // Chọn tab tài khoản
+            startActivity(intent);
+            finish();
+        }
     }
-    // Kiểm tra định dạng email + mật khẩu không rỗng
+
     private boolean kiemTraEmailPassword(String Email, String Password) {
         if (Email.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập email", Toast.LENGTH_SHORT).show();
             email.requestFocus();
             return false;
         }
-
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(Email).matches()) {
             Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
             email.requestFocus();
             return false;
         }
-
         if (Password.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập mật khẩu", Toast.LENGTH_SHORT).show();
             password.requestFocus();
             return false;
         }
-
         if (Password.length() < 6) {
             Toast.makeText(this, "Mật khẩu phải có ít nhất 6 ký tự", Toast.LENGTH_SHORT).show();
             password.requestFocus();
             return false;
         }
-
         return true;
     }
 
-    // Lưu thông tin đăng nhập nếu "nhớ"
     private void saveLoginInfo(String emailText) {
         SharedPreferences prefs = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -215,7 +178,6 @@ mAuth.signInWithEmailAndPassword(Email,Pw)
         editor.apply();
     }
 
-    // Xóa thông tin đã lưu nếu không nhớ
     private void clearSavedLoginInfo() {
         SharedPreferences prefs = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -224,11 +186,9 @@ mAuth.signInWithEmailAndPassword(Email,Pw)
         editor.apply();
     }
 
-    // Tải email đã lưu nếu có
     private void loadSavedLoginInfo() {
         SharedPreferences prefs = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         boolean rememberMe = prefs.getBoolean(KEY_REMEMBER, false);
-
         if (rememberMe) {
             String savedEmail = prefs.getString(KEY_EMAIL, "");
             if (!savedEmail.isEmpty()) {
