@@ -2,55 +2,64 @@ package com.example.myapplication.Profile;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
 import com.example.myapplication.DangNhapActivity;
 import com.example.myapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
 public class ThongTinNDActivity extends AppCompatActivity {
     private TextView tvUserName;
     private ImageView profileAvatar;
-    // CardViews cho các menu
     private CardView cardFavorites, cardOrderHistory, cardDeliveryAddress,
             cardUpdateInfo, cardChangePassword, cardNotifications,
             cardSupport, cardLogout;
-    // Firebase
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri imageUri;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private FirebaseUser currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thong_tin_ndactivity);
-        // Khởi tạo Firebase
+
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         currentUser = mAuth.getCurrentUser();
-        // Kiểm tra đăng nhập
+
         if (currentUser == null) {
-            // Nếu chưa đăng nhập, chuyển về màn hình đăng nhập
-            Intent intent = new Intent(this, DangNhapActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, DangNhapActivity.class));
             finish();
             return;
         }
-        // Khởi tạo views
+
         initViews();
-        // Thiết lập thông tin người dùng
-        setupUserInfo();
-        // Thiết lập click listeners
         setupClickListeners();
+        setupUserInfo();
+        loadAvatarFromDatabase();
     }
+
     private void initViews() {
         tvUserName = findViewById(R.id.tv_user_name);
         profileAvatar = findViewById(R.id.profile_avatar);
@@ -63,101 +72,91 @@ public class ThongTinNDActivity extends AppCompatActivity {
         cardSupport = findViewById(R.id.card_support);
         cardLogout = findViewById(R.id.card_logout);
     }
+
     private void setupUserInfo() {
-        // Lấy thông tin từ Intent hoặc Firebase
         Intent intent = getIntent();
         String userName = intent.getStringExtra("USER_NAME");
-        String userEmail = intent.getStringExtra("USER_EMAIL");
-        String userUid = intent.getStringExtra("USER_UID");
-        // Nếu có tên từ Intent, hiển thị luôn
         if (userName != null && !userName.isEmpty()) {
             tvUserName.setText(userName);
         } else {
-            // Nếu không có, lấy từ Firebase Database
-            loadUserInfoFromDatabase();
+            tvUserName.setText(currentUser.getEmail());
         }
-        // Có thể thêm logic load avatar từ Firebase Storage ở đây
     }
-    private void loadUserInfoFromDatabase() {
-        if (currentUser != null) {
-            String userId = currentUser.getUid();
 
-            mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        String name = dataSnapshot.child("name").getValue(String.class);
-                        if (name != null && !name.isEmpty()) {
-                            tvUserName.setText(name);
-                        } else {
-                            // Fallback sử dụng email
-                            tvUserName.setText(currentUser.getEmail());
-                        }
-                    } else {
-                        // Nếu không có data trong database, sử dụng email
-                        tvUserName.setText(currentUser.getEmail());
-                    }
-                }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Xử lý lỗi
-                    tvUserName.setText(currentUser.getEmail());
-                }
-            });
+    private void setupClickListeners() {
+        profileAvatar.setOnClickListener(v -> openImagePicker());
+
+        cardFavorites.setOnClickListener(v -> Toast.makeText(this, "Chức năng Bánh yêu thích đang phát triển", Toast.LENGTH_SHORT).show());
+        cardOrderHistory.setOnClickListener(v -> Toast.makeText(this, "Chức năng Lịch sử đơn hàng đang phát triển", Toast.LENGTH_SHORT).show());
+        cardDeliveryAddress.setOnClickListener(v -> Toast.makeText(this, "Chức năng Địa chỉ giao hàng đang phát triển", Toast.LENGTH_SHORT).show());
+        cardUpdateInfo.setOnClickListener(v -> Toast.makeText(this, "Chức năng Cập nhật thông tin đang phát triển", Toast.LENGTH_SHORT).show());
+        cardChangePassword.setOnClickListener(v -> Toast.makeText(this, "Chức năng Đổi mật khẩu đang phát triển", Toast.LENGTH_SHORT).show());
+        cardNotifications.setOnClickListener(v -> Toast.makeText(this, "Chức năng Thông báo đang phát triển", Toast.LENGTH_SHORT).show());
+        cardSupport.setOnClickListener(v -> showSupportDialog());
+        cardLogout.setOnClickListener(v -> showLogoutDialog());
+    }
+
+    private void openImagePicker() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Chọn ảnh"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            String base64Image = encodeImageToBase64(imageUri);
+            if (base64Image != null) {
+                saveBase64ToRealtime(base64Image);
+                profileAvatar.setImageURI(imageUri);
+            }
         }
     }
-    private void setupClickListeners() {
-        // Bánh đã yêu thích
-        cardFavorites.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng Bánh yêu thích đang phát triển", Toast.LENGTH_SHORT).show();
-            // TODO: Implement favorites activity
-            // Intent intent = new Intent(this, FavoritesActivity.class);
-            // startActivity(intent);
-        });
-        // Lịch sử đơn hàng
-        cardOrderHistory.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng Lịch sử đơn hàng đang phát triển", Toast.LENGTH_SHORT).show();
-            // TODO: Implement order history activity
-            // Intent intent = new Intent(this, OrderHistoryActivity.class);
-            // startActivity(intent);
-        });
-        // Địa chỉ giao hàng
-        cardDeliveryAddress.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng Địa chỉ giao hàng đang phát triển", Toast.LENGTH_SHORT).show();
-            // TODO: Implement delivery address activity
-            // Intent intent = new Intent(this, DeliveryAddressActivity.class);
-            // startActivity(intent);
-        });
-        // Cập nhật thông tin
-        cardUpdateInfo.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng Cập nhật thông tin đang phát triển", Toast.LENGTH_SHORT).show();
-            // TODO: Implement update info activity
-            // Intent intent = new Intent(this, UpdateInfoActivity.class);
-            // startActivity(intent);
-        });
-        // Đổi mật khẩu
-        cardChangePassword.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng Đổi mật khẩu đang phát triển", Toast.LENGTH_SHORT).show();
-            // TODO: Implement change password activity
-            // Intent intent = new Intent(this, ChangePasswordActivity.class);
-            // startActivity(intent);
-        });
-        // Thông báo
-        cardNotifications.setOnClickListener(v -> {
-            Toast.makeText(this, "Chức năng Thông báo đang phát triển", Toast.LENGTH_SHORT).show();
-            // TODO: Implement notifications activity
-            // Intent intent = new Intent(this, NotificationsActivity.class);
-            // startActivity(intent);
-        });
-        // Liên hệ hỗ trợ
-        cardSupport.setOnClickListener(v -> {
-            showSupportDialog();
-        });
-        // Đăng xuất
-        cardLogout.setOnClickListener(v -> {
-            showLogoutDialog();
-        });
+
+    private String encodeImageToBase64(Uri imageUri) {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(imageUri);
+            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+            byte[] imageBytes = baos.toByteArray();
+            return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+
+    private void saveBase64ToRealtime(String base64) {
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            mDatabase.child("users").child(uid).child("avatarBase64").setValue(base64)
+                    .addOnSuccessListener(aVoid -> Toast.makeText(this, "Lưu avatar thành công", Toast.LENGTH_SHORT).show())
+                    .addOnFailureListener(e -> Toast.makeText(this, "Lỗi lưu avatar", Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    private void loadAvatarFromDatabase() {
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+            mDatabase.child("users").child(uid).child("avatarBase64")
+                    .get()
+                    .addOnSuccessListener(snapshot -> {
+                        String base64 = snapshot.getValue(String.class);
+                        if (base64 != null && !base64.isEmpty()) {
+                            byte[] imageBytes = Base64.decode(base64, Base64.DEFAULT);
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+                            profileAvatar.setImageBitmap(bitmap);
+                        } else {
+                            profileAvatar.setImageResource(R.drawable.default_avatar);
+                        }
+                    });
+        }
+    }
+
     private void showSupportDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Liên hệ hỗ trợ")
@@ -166,47 +165,41 @@ public class ThongTinNDActivity extends AppCompatActivity {
                         "📞 Hotline: 1900-xxxx\n" +
                         "🕐 Thời gian: 8:00 - 22:00 hàng ngày")
                 .setPositiveButton("Đóng", null)
-                .setNeutralButton("Gọi hotline", (dialog, which) -> {
-                    Toast.makeText(this, "Tính năng gọi điện đang phát triển", Toast.LENGTH_SHORT).show();
-                    // TODO: Implement phone call
-                })
+                .setNeutralButton("Gọi hotline", (dialog, which) ->
+                        Toast.makeText(this, "Tính năng gọi điện đang phát triển", Toast.LENGTH_SHORT).show())
                 .show();
     }
+
     private void showLogoutDialog() {
         new AlertDialog.Builder(this)
                 .setTitle("Đăng xuất")
                 .setMessage("Bạn có chắc chắn muốn đăng xuất không?")
-                .setPositiveButton("Đăng xuất", (dialog, which) -> {
-                    performLogout();
-                })
+                .setPositiveButton("Đăng xuất", (dialog, which) -> performLogout())
                 .setNegativeButton("Hủy", null)
                 .show();
     }
+
     private void performLogout() {
-        // Đăng xuất Firebase
         mAuth.signOut();
-        getSharedPreferences("LoginPrefs", MODE_PRIVATE)
-                .edit()
+        getSharedPreferences("LoginPrefs", MODE_PRIVATE).edit()
                 .putBoolean("remember", false)
                 .remove("email")
                 .apply();
         Toast.makeText(this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
-        // Chuyển về màn hình đăng nhập
-        Intent intent = new Intent(this, DangNhapActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        startActivity(new Intent(this, DangNhapActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         finish();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-        // Kiểm tra lại trạng thái đăng nhập mỗi khi activity resume
         if (mAuth.getCurrentUser() == null) {
-            Intent intent = new Intent(this, DangNhapActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, DangNhapActivity.class));
             finish();
         }
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

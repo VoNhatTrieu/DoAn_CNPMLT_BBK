@@ -16,7 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.Profile.DoiMatKhauActivity;
 import com.example.myapplication.Profile.ThongTinNDActivity;
+import com.example.myapplication.Yeuthich.DSYTActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,8 +36,8 @@ public class TaiKhoanFragment extends Fragment {
 
     // Profile menu items (when logged in)
     private LinearLayout llProfileMenu;
-    private LinearLayout llFavorites, llOrderHistory, llDeliveryAddress,
-            llUpdateInfo, llChangePassword, llNotifications,
+    private LinearLayout llFavorites, llOrderHistory, llDeliveryAddress
+    , llChangePassword, llNotifications,
             llContactSupport, llLogout;
 
     // Firebase
@@ -85,7 +87,7 @@ public class TaiKhoanFragment extends Fragment {
         llFavorites = view.findViewById(R.id.ll_favorites);
         llOrderHistory = view.findViewById(R.id.ll_order_history);
         llDeliveryAddress = view.findViewById(R.id.ll_delivery_address);
-        llUpdateInfo = view.findViewById(R.id.ll_update_info);
+
         llChangePassword = view.findViewById(R.id.ll_change_password);
         llNotifications = view.findViewById(R.id.ll_notifications);
         llContactSupport = view.findViewById(R.id.ll_contact_support);
@@ -110,13 +112,14 @@ public class TaiKhoanFragment extends Fragment {
 
         // Về chúng tôi
         llAbout.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Ứng dụng bán bánh kem - Phiên bản demo", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Ứng dụng bán bánh kem", Toast.LENGTH_SHORT).show();
         });
 
         // Profile menu click listeners
         if (llFavorites != null) {
             llFavorites.setOnClickListener(v -> {
-                Toast.makeText(getContext(), "Chức năng Bánh yêu thích đang phát triển", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), DSYTActivity.class);
+                startActivity(intent);
             });
         }
 
@@ -132,15 +135,12 @@ public class TaiKhoanFragment extends Fragment {
             });
         }
 
-        if (llUpdateInfo != null) {
-            llUpdateInfo.setOnClickListener(v -> {
-                Toast.makeText(getContext(), "Chức năng Cập nhật thông tin đang phát triển", Toast.LENGTH_SHORT).show();
-            });
-        }
+
 
         if (llChangePassword != null) {
             llChangePassword.setOnClickListener(v -> {
-                Toast.makeText(getContext(), "Chức năng Đổi mật khẩu đang phát triển", Toast.LENGTH_SHORT).show();
+              Intent intent=new Intent(getActivity(), DoiMatKhauActivity.class);
+              startActivity(intent);
             });
         }
 
@@ -161,6 +161,14 @@ public class TaiKhoanFragment extends Fragment {
                 showLogoutDialog();
             });
         }
+        ivUserAvatar.setOnClickListener(v -> {
+            if (mAuth.getCurrentUser() != null) {
+                Intent intent = new Intent(getActivity(), ThongTinNDActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getContext(), "Vui lòng đăng nhập để chỉnh sửa avatar", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -197,7 +205,7 @@ public class TaiKhoanFragment extends Fragment {
 
                 // Hiển thị thông tin người dùng
                 if (userName != null && !userName.isEmpty()) {
-                    tvWelcomeTitle.setText("Xin chào, " + userName);
+                    tvWelcomeTitle.setText( userName);
                 } else {
                     tvWelcomeTitle.setText("Xin chào!");
                 }

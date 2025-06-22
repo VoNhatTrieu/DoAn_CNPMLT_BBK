@@ -11,20 +11,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.*;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.google.firebase.auth.*;
+import com.google.firebase.database.*;
 
 public class DangNhapActivity extends AppCompatActivity {
     private static final String TAG = "DangNhapActivity";
@@ -53,7 +46,6 @@ public class DangNhapActivity extends AppCompatActivity {
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         initViews();
@@ -76,18 +68,10 @@ public class DangNhapActivity extends AppCompatActivity {
     private void setupClickListeners() {
         btback.setOnClickListener(v -> onBackPressed());
         login.setOnClickListener(v -> Login());
-        qmk.setOnClickListener(v -> {
-            Intent intent = new Intent(this, QuenMKActivity.class);
-            startActivity(intent);
-        });
-        taotk.setOnClickListener(v -> {
-            Intent intent = new Intent(this, DangKiActivity.class);
-            startActivity(intent);
-        });
+        qmk.setOnClickListener(v -> startActivity(new Intent(this, QuenMKActivity.class)));
+        taotk.setOnClickListener(v -> startActivity(new Intent(this, DangKiActivity.class)));
         gg.setOnClickListener(v -> DangNhapGG());
-        fb.setOnClickListener(v -> {
-            Toast.makeText(this, "Tính năng đăng nhập Facebook đang phát triển", Toast.LENGTH_SHORT).show();
-        });
+        fb.setOnClickListener(v -> Toast.makeText(this, "Tính năng đăng nhập Facebook đang phát triển", Toast.LENGTH_SHORT).show());
     }
 
     private void DangNhapGG() {
@@ -95,13 +79,41 @@ public class DangNhapActivity extends AppCompatActivity {
         startActivityForResult(intent, RC_SIGN_IN);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                if (account != null) {
+                    firebaseAuthWithGoogle(account.getIdToken());
+                }
+            } catch (ApiException e) {
+                Toast.makeText(this, "Đăng nhập Google thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        navigateToProfile(user);
+                    } else {
+                        Toast.makeText(this, "Xác thực Firebase thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     private void Login() {
         String Email = email.getText() != null ? email.getText().toString().trim() : "";
         String Pw = password.getText() != null ? password.getText().toString().trim() : "";
 
-        if (!kiemTraEmailPassword(Email, Pw)) {
-            return;
-        }
+        if (!kiemTraEmailPassword(Email, Pw)) return;
 
         mAuth.signInWithEmailAndPassword(Email, Pw)
                 .addOnCompleteListener(this, task -> {
@@ -140,7 +152,7 @@ public class DangNhapActivity extends AppCompatActivity {
             intent.putExtra("USER_EMAIL", user.getEmail());
             intent.putExtra("USER_NAME", user.getDisplayName());
             intent.putExtra("USER_UID", user.getUid());
-            intent.putExtra("SELECTED_TAB", R.id.nav_account); // Chọn tab tài khoản
+            intent.putExtra("SELECTED_TAB", R.id.nav_account);
             startActivity(intent);
             finish();
         }

@@ -76,7 +76,7 @@ public class DangKiActivity extends AppCompatActivity {
 
         btnDKI.setEnabled(false);
         btnDKI.setText("Đang đăng kí...");
-        Toast.makeText(this,"Đăng kí thành công",Toast.LENGTH_SHORT).show();
+
         auth.createUserWithEmailAndPassword(email, passw)
                 .addOnCompleteListener(this, task -> {
                     btnDKI.setEnabled(true);

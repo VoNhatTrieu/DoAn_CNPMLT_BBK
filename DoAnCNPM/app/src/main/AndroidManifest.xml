@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.myapplication">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
+        <activity
+            android:name=".Profile.CapNhatThongtinActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Profile.DoiMatKhauActivity"
+            android:exported="false" />
         <activity
             android:name=".Profile.ThongTinNDActivity"
             android:exported="false" />
@@ -31,7 +40,6 @@
         <activity
             android:name=".Yeuthich.DSYTActivity"
             android:exported="false" />
-
         <activity
             android:name=".QuenMKActivity"
             android:exported="false" />

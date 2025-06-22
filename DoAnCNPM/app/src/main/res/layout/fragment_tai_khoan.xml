@@ -30,6 +30,8 @@
                 android:layout_height="80dp"
                 android:src="@drawable/baseline_account_circle_24"
                 app:tint="#CCCCCC"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_marginBottom="16dp" />
 
             <!-- Welcome Text -->
@@ -198,41 +200,6 @@
                     android:textSize="16sp"
                     android:textColor="#333333" />
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#F0F0F0"
-                android:layout_marginVertical="8dp" />
-
-            <!-- Update Info -->
-            <LinearLayout
-                android:id="@+id/ll_update_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:padding="12dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/baseline_edit_24"
-                    app:tint="#FF9800"
-                    android:layout_marginEnd="16dp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Cập nhật thông tin"
-                    android:textSize="16sp"
-                    android:textColor="#333333" />
-            </LinearLayout>
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
