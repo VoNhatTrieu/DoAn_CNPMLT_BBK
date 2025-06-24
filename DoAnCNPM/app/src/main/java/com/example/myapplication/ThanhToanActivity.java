@@ -18,6 +18,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.myapplication.Profile.lsdh_order;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.List;
+
 public class ThanhToanActivity extends AppCompatActivity {
     private ImageView back;
     private EditText ten,diachi,sodiethoai;
@@ -26,6 +32,8 @@ public class ThanhToanActivity extends AppCompatActivity {
     private  int tongtien=0;
     private  int tiencoc=0;
     private  int tienconlai=0;
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
     private Button pay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +49,18 @@ public class ThanhToanActivity extends AppCompatActivity {
         tvtiencoc=findViewById(R.id.tv_deposit_amount);
         tvtienconlai=findViewById(R.id.tv_remaining_amount);
 
+        db=FirebaseFirestore.getInstance();
+        mAuth=FirebaseAuth.getInstance();
         back.setOnClickListener(v -> {
             Log.d("Trchitietsp","quay về trang chi tiết");
             finish();
         });
-       tongtien= getIntent().getIntExtra("TOTAL_AMOUNT", 0);
-        tiencoc=tongtien/2;
-        tienconlai=tongtien-tiencoc;
+        tongtien = ghmanager.getInstance().tinhTong();
+        tiencoc = tongtien / 2;
+        tienconlai = tongtien - tiencoc;
         PTTTT();
+
+
         phuongthucthanhtoan.setOnCheckedChangeListener((group, checkedId) -> {
             pay.setEnabled(checkedId!=-1);
         });
@@ -87,7 +99,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                 "Số tiền còn lại %,dđ sẽ được thanh toán khi nhận hàng.\n\n" +
                 "Xác nhận thanh toán?", tongtien,tiencoc,tienconlai));
         alertDialog.setPositiveButton("Xác nhận",(dialog, which) -> {
-           ShowPT();
+            LuuDHFB(pt);
         });
         alertDialog.setNegativeButton("Hủy",(dialog, which) -> {
             dialog.dismiss();
@@ -95,17 +107,40 @@ public class ThanhToanActivity extends AppCompatActivity {
         alertDialog.setCancelable(false);
         alertDialog.show();
     }
-    private  void ShowPT(){
-        AlertDialog.Builder alert=new AlertDialog.Builder(this);
-        alert.setTitle("Thanh toán cọc thành công!");
-        alert.setMessage(String.format(  "Đã thanh toán cọc: %,dđ\n" +
-                "Số tiền còn lại: %,dđ (thanh toán khi nhận hàng)\n\n" +
-                "Đơn hàng của bạn đang được xử lý.",tiencoc,tienconlai));
-        alert.setPositiveButton("OK",(dialog, which) -> {
+
+    private void LuuDHFB(String payment){
+        if(mAuth.getCurrentUser()==null){
+            Toast.makeText(this,"Vui lòng đăng nhập để thanh toán",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String userId = mAuth.getCurrentUser().getUid();
+        String name = ten.getText().toString().trim();
+        String address = diachi.getText().toString().trim();
+        String phone = sodiethoai.getText().toString().trim();
+        List<SanPham> cartItems = ghmanager.getInstance().getCartItems();
+        String orderId = db.collection("orders").document().getId();
+
+        lsdh_order order = new lsdh_order(orderId, userId, name, address, phone, payment, tongtien, tiencoc, tienconlai, cartItems, "Pending");
+        db.collection("orders").document(orderId).set(order).addOnSuccessListener(aVoid ->{
+                ShowTTTC();
             ghmanager.getInstance().cleatCart();
+
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this,"Thanh toán thất bại",Toast.LENGTH_SHORT).show();
+        });
+
+    }
+    private  void ShowTTTC(){
+        AlertDialog.Builder alert=new AlertDialog.Builder(this);
+        alert.setTitle("Thanh toán thành công!");
+        alert.setMessage(String.format("Đã thanh toán cọc: %,dđ\n" +
+                "Số tiền còn lại: %,dđ (thanh toán khi nhận hàng)\n\n" +
+                "Đơn hàng của bạn đang được xử lý.", tiencoc, tienconlai));
+        alert.setPositiveButton("OK",(dialog, which) -> {
             finish();
         });
         alert.setCancelable(false);
         alert.show();
+
     }
 }

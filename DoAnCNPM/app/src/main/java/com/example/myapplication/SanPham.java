@@ -7,41 +7,34 @@ public class SanPham implements Serializable {
     private int gia;
     private int soLuong;
     private int anh; // Resource ID cho hình ảnh
-    private String cateri; // Thêm trường danh mục
+    private String cateri;
 
-    public SanPham(String ten, int gia, int anh, String cateri) { // Cập nhật constructor
+    // ✅ Constructor rỗng - BẮT BUỘC CHO FIRESTORE
+    public SanPham() {
+    }
+
+    // Constructor có tham số
+    public SanPham(String ten, int gia, int anh, String cateri) {
         this.ten = ten;
         this.gia = gia;
-        this.soLuong = 1; // Mặc định số lượng là 1
+        this.soLuong = 1;
         this.anh = anh;
         this.cateri = cateri;
     }
 
-    public String getTen() {
-        return ten;
-    }
+    // Getter và Setter
+    public String getTen() { return ten; }
+    public void setTen(String ten) { this.ten = ten; }
 
-    public int getGia() {
-        return gia;
-    }
+    public int getGia() { return gia; }
+    public void setGia(int gia) { this.gia = gia; }
 
-    public int getSoLuong() {
-        return soLuong;
-    }
+    public int getSoLuong() { return soLuong; }
+    public void setSoLuong(int soLuong) { this.soLuong = soLuong; }
 
-    public void setSoLuong(int soLuong) {
-        this.soLuong = soLuong;
-    }
+    public int getAnh() { return anh; }
+    public void setAnh(int anh) { this.anh = anh; }
 
-    public int getAnh() {
-        return anh;
-    }
-
-    public String getCateri() { // Thêm getter cho cateri
-        return cateri;
-    }
-
-    public void setCateri(String cateri) {
-        this.cateri = cateri;
-    }
+    public String getCateri() { return cateri; }
+    public void setCateri(String cateri) { this.cateri = cateri; }
 }

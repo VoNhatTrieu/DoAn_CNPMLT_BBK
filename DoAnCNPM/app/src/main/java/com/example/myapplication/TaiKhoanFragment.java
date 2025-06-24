@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.Profile.DoiMatKhauActivity;
+import com.example.myapplication.Profile.LichSuDonHangActivity;
 import com.example.myapplication.Profile.ThongTinNDActivity;
 import com.example.myapplication.Yeuthich.DSYTActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -125,7 +126,8 @@ public class TaiKhoanFragment extends Fragment {
 
         if (llOrderHistory != null) {
             llOrderHistory.setOnClickListener(v -> {
-                Toast.makeText(getContext(), "Chức năng Lịch sử đơn hàng đang phát triển", Toast.LENGTH_SHORT).show();
+               Intent intent=new Intent(getActivity(), LichSuDonHangActivity.class);
+               startActivity(intent);
             });
         }
 
