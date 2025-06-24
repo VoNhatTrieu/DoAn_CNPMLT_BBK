@@ -17,9 +17,17 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
+            android:name=".Profile.OrderProductAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".Profile.CTDonDHActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Profile.TheoDoiDonHangActivity"
+            android:exported="false" />
+        <activity
             android:name=".Profile.LichSuDonHangActivity"
             android:exported="false" />
-
         <activity
             android:name=".Profile.DoiMatKhauActivity"
             android:exported="false" />
@@ -56,7 +64,6 @@
         <activity
             android:name=".Trchitietsp"
             android:exported="false" />
-
     </application>
 
 </manifest>

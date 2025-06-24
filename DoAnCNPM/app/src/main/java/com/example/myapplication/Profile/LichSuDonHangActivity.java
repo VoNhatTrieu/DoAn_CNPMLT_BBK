@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -53,6 +54,7 @@ public class LichSuDonHangActivity extends AppCompatActivity {
             Toast.makeText(this,"Vui lòng đăng nhập",Toast.LENGTH_SHORT).show();
             finish();
         }
+
     }
     private void TaiDonHang(){
         String userId = mAuth.getCurrentUser().getUid();
@@ -79,25 +81,26 @@ public class LichSuDonHangActivity extends AppCompatActivity {
                     orderAdapter.notifyDataSetChanged();
                 });
     }
-    private  void huyDonHang(lsdh_order order){
-        if(!order.getStatus().equals("Pending")){
-            Toast.makeText(this,"Không thể hủy đơn hàng này",Toast.LENGTH_SHORT).show();
-            return;
-        }
-        new androidx.appcompat.app.AlertDialog.Builder(this).setTitle("Xác nhận hủy đơn hàng")
-                .setMessage("Bạn có chắc chắn muốn hủy đơn hàng này?")
-                .setMessage(String.format("Nếu hủy bạn sẽ mất 50%% số tiền đặt cọc đơn hàng này, Xác nhận hủy",order.getDepositAmount()))
-                .setPositiveButton("Hủy đơn",(dialog,which)->{
+    private void huyDonHang(lsdh_order order) {
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận hủy đơn hàng")
+                .setMessage(String.format("Nếu hủy bạn sẽ mất 50%% số tiền đặt cọc đơn hàng này. Xác nhận hủy?"))
+                .setPositiveButton("Hủy đơn", (dialog, which) -> {
                     db.collection("orders").document(order.getOrderId())
-                            .update("status","Cancelled")
+                            .delete()
                             .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(this,"Đơn hàng đã được hủy",Toast.LENGTH_SHORT).show();
-                            }).addOnFailureListener(e -> {
-                                Toast.makeText(this,"Lỗi hủy đơn hàng",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "Đơn hàng đã được hủy và xóa khỏi lịch sử", Toast.LENGTH_SHORT).show();
+                                orderList.remove(order); // Cập nhật danh sách
+                                orderAdapter.notifyDataSetChanged();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(this, "Lỗi khi xóa đơn hàng: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             });
-
-                }).setNegativeButton("Không",null).show();
+                })
+                .setNegativeButton("Không", null)
+                .show();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
