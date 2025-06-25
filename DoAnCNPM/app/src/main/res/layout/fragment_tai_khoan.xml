@@ -188,7 +188,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/baseline_add_location_24"
+                    android:src="@drawable/baseline_public_24"
                     app:tint="#4CAF50"
                     android:layout_marginEnd="16dp" />
 
@@ -196,7 +196,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Địa chỉ giao hàng"
+                    android:text="Bình luận và đánh giá"
                     android:textSize="16sp"
                     android:textColor="#333333" />
             </LinearLayout>

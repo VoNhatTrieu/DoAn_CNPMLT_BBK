@@ -82,11 +82,11 @@ public class Order_lsdhAdapter extends RecyclerView.Adapter<Order_lsdhAdapter.Or
 
         });
 
-        holder.tvoderdetail.setOnClickListener(v -> {
-            Intent intent=new Intent(context, CTDonDHActivity.class);
-            intent.putExtra("order",order);
-            context.startActivity(intent);
-        });
+//        holder.tvoderdetail.setOnClickListener(v -> {
+//            Intent intent=new Intent(context, CTDonDHActivity.class);
+//            intent.putExtra("order",order);
+//            context.startActivity(intent);
+//        });
         if (order.getStatus().equals("Cancelled")) {
             holder.btnReOrder.setVisibility(View.VISIBLE);
             holder.btnReOrder.setOnClickListener(v -> {

@@ -1,0 +1,53 @@
+[
+  {
+    "name": "TP. Hồ Chí Minh",
+    "districts": [
+      {
+        "name": "Quận 1",
+        "wards": [
+          "Bến Nghé", "Bến Thành", "Nguyễn Thái Bình", "Phạm Ngũ Lão",
+          "Cô Giang", "Cầu Kho", "Đa Kao", "Tân Định"
+        ]
+      },
+      {
+        "name": "Quận 3",
+        "wards": [
+          "Phường 1", "Phường 2", "Phường 3", "Phường 4",
+          "Phường 5", "Phường 6", "Phường 7", "Phường 8",
+          "Phường 9", "Phường 10", "Phường 11", "Phường 12", "Phường 13", "Phường 14"
+        ]
+      },
+      {
+        "name": "Quận 5",
+        "wards": [
+          "Phường 1", "Phường 2", "Phường 3", "Phường 4",
+          "Phường 5", "Phường 6", "Phường 7", "Phường 8",
+          "Phường 9", "Phường 10", "Phường 11", "Phường 12", "Phường 13", "Phường 14", "Phường 15"
+        ]
+      },
+      {
+        "name": "Quận 10",
+        "wards": [
+          "Phường 1", "Phường 2", "Phường 3", "Phường 4",
+          "Phường 5", "Phường 6", "Phường 7", "Phường 8",
+          "Phường 9", "Phường 10", "Phường 11", "Phường 12", "Phường 13", "Phường 14", "Phường 15"
+        ]
+      },
+      {
+        "name": "Quận Bình Thạnh",
+        "wards": [
+          "Phường 1", "Phường 2", "Phường 3", "Phường 5", "Phường 6", "Phường 7",
+          "Phường 11", "Phường 12", "Phường 13", "Phường 14", "Phường 15",
+          "Phường 17", "Phường 19", "Phường 21", "Phường 22", "Phường 24", "Phường 25", "Phường 26", "Phường 27", "Phường 28"
+        ]
+      },
+      {
+        "name": "Quận Gò Vấp",
+        "wards": [
+          "Phường 1", "Phường 3", "Phường 4", "Phường 5", "Phường 6", "Phường 7",
+          "Phường 8", "Phường 9", "Phường 10", "Phường 11", "Phường 12", "Phường 13", "Phường 14", "Phường 15", "Phường 16", "Phường 17"
+        ]
+      }
+    ]
+  }
+]
