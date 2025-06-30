@@ -193,32 +193,28 @@ public class TaiKhoanFragment extends Fragment {
     }
 
     private void showProfileInterface() {
-        // Lấy thông tin người dùng từ Firebase Database
         String userId = currentUser.getUid();
         mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String userName = "";
+                String role = dataSnapshot.child("role").getValue(String.class);
+
+                if ("admin".equals(role)) {
+                    // 👉 Nếu là admin, chuyển luôn sang AdminActivity
+                    Intent intent = new Intent(getActivity(), com.example.myapplication.admin.AdminActivity.class);
+                    startActivity(intent);
+                    return; // Không hiển thị giao diện người dùng nữa
+                }
+
+                // Nếu không phải admin, hiển thị như bình thường
+                String userName = dataSnapshot.child("name").getValue(String.class);
                 String userEmail = currentUser.getEmail();
 
-                if (dataSnapshot.exists()) {
-                    userName = dataSnapshot.child("name").getValue(String.class);
-                }
-
-                // Hiển thị thông tin người dùng
-                if (userName != null && !userName.isEmpty()) {
-                    tvWelcomeTitle.setText( userName);
-                } else {
-                    tvWelcomeTitle.setText("Xin chào!");
-                }
-
+                tvWelcomeTitle.setText(userName != null ? userName : "Xin chào!");
                 tvWelcomeSubtitle.setText(userEmail);
 
-                // Ẩn nút đăng nhập/đăng ký
                 btnLogin.setVisibility(View.GONE);
                 btnRegister.setVisibility(View.GONE);
-
-                // Hiển thị menu profile
                 if (llProfileMenu != null) {
                     llProfileMenu.setVisibility(View.VISIBLE);
                 }
@@ -226,7 +222,6 @@ public class TaiKhoanFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Nếu không lấy được thông tin từ database, vẫn hiển thị interface
                 tvWelcomeTitle.setText("Xin chào!");
                 tvWelcomeSubtitle.setText(currentUser.getEmail());
                 btnLogin.setVisibility(View.GONE);
@@ -237,6 +232,7 @@ public class TaiKhoanFragment extends Fragment {
             }
         });
     }
+
 
     private void showLoginInterface() {
         // Hiển thị giao diện đăng nhập

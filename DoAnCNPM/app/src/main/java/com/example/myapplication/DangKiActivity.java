@@ -110,7 +110,7 @@ public class DangKiActivity extends AppCompatActivity {
             userMap.put("signInMethod", "email");
             userMap.put("createdAt", System.currentTimeMillis());
             userMap.put("isEmailVerified", user.isEmailVerified());
-
+            userMap.put("role", "user");
             mDatabase.child("users").child(userId).setValue(userMap)
                     .addOnSuccessListener(aVoid -> {
                         Log.d(TAG, "User data saved successfully");

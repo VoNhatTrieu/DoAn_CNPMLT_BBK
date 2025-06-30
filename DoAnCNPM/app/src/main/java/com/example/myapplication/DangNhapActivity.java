@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.admin.AdminActivity;
 import com.google.android.gms.auth.api.signin.*;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
@@ -102,7 +103,21 @@ public class DangNhapActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
-                        navigateToProfile(user);
+                        // Kiểm tra role sau khi đăng nhập bằng Google
+                        mDatabase.child("users").child(user.getUid()).child("role")
+                                .get().addOnSuccessListener(snapshot -> {
+                                    String role = snapshot.getValue(String.class);
+                                    if ("admin".equals(role)) {
+                                        startActivity(new Intent(DangNhapActivity.this, AdminActivity.class));
+                                    } else {
+                                        startActivity(new Intent(DangNhapActivity.this, MainActivity.class));
+                                    }
+                                    finish();
+                                }).addOnFailureListener(e -> {
+                                    Toast.makeText(this, "Không xác định được vai trò người dùng", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(DangNhapActivity.this, MainActivity.class));
+                                    finish();
+                                });
                     } else {
                         Toast.makeText(this, "Xác thực Firebase thất bại", Toast.LENGTH_SHORT).show();
                     }
@@ -126,7 +141,22 @@ public class DangNhapActivity extends AppCompatActivity {
                         } else {
                             clearSavedLoginInfo();
                         }
-                        navigateToProfile(user);
+
+                        // Kiểm tra role sau khi đăng nhập
+                        mDatabase.child("users").child(user.getUid()).child("role")
+                                .get().addOnSuccessListener(snapshot -> {
+                                    String role = snapshot.getValue(String.class);
+                                    if ("admin".equals(role)) {
+                                        startActivity(new Intent(DangNhapActivity.this, AdminActivity.class));
+                                    } else {
+                                        startActivity(new Intent(DangNhapActivity.this, MainActivity.class));
+                                    }
+                                    finish();
+                                }).addOnFailureListener(e -> {
+                                    Toast.makeText(this, "Không xác định được vai trò người dùng", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(DangNhapActivity.this, MainActivity.class));
+                                    finish();
+                                });
                     } else {
                         Toast.makeText(this, getErrorMessage(task.getException()), Toast.LENGTH_SHORT).show();
                     }
@@ -144,18 +174,6 @@ public class DangNhapActivity extends AppCompatActivity {
             if (err.contains("TOO_MANY_REQUESTS")) return "Quá nhiều lần đăng nhập";
         }
         return "Đăng nhập thất bại. Vui lòng thử lại sau";
-    }
-
-    private void navigateToProfile(FirebaseUser user) {
-        if (user != null) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("USER_EMAIL", user.getEmail());
-            intent.putExtra("USER_NAME", user.getDisplayName());
-            intent.putExtra("USER_UID", user.getUid());
-            intent.putExtra("SELECTED_TAB", R.id.nav_account);
-            startActivity(intent);
-            finish();
-        }
     }
 
     private boolean kiemTraEmailPassword(String Email, String Password) {
