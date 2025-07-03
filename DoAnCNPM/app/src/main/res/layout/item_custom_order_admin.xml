@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="6dp"
+    android:layout_margin="8dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/img_anh_mau"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_foreground"
+            android:layout_marginBottom="8dp" />
+
+        <TextView android:id="@+id/tv_ten_banh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tên bánh"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginBottom="4dp" />
+
+        <TextView android:id="@+id/tv_nguoi_nhan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Người nhận"
+            android:layout_marginBottom="4dp" />
+
+        <TextView android:id="@+id/tv_sdt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số điện thoại"
+            android:layout_marginBottom="4dp" />
+
+        <TextView android:id="@+id/tv_loai_banh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loại bánh"
+            android:layout_marginBottom="4dp" />
+
+        <TextView android:id="@+id/tv_ngay_giao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ngày giao"
+            android:layout_marginBottom="4dp" />
+
+        <TextView android:id="@+id/tv_mo_ta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mô tả"
+            android:layout_marginBottom="4dp" />
+
+        <TextView android:id="@+id/tv_trang_thai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trạng thái"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Thông tin báo giá (ẩn nếu chưa có) -->
+        <LinearLayout
+            android:id="@+id/layout_bao_gia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:padding="8dp"
+            android:background="#FFE0B2">
+
+            <TextView
+                android:id="@+id/tv_gia_bao_gia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Giá báo:"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tv_chi_phi_nguyen_lieu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chi phí nguyên liệu:"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tv_thong_tin_bao_gia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Thông tin báo giá:"
+                android:layout_marginBottom="4dp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_bao_gia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Báo giá"
+            android:layout_marginTop="8dp" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

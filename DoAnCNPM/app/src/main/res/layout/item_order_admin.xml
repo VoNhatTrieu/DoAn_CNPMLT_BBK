@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@android:color/white">
+
+    <!-- Phần ảnh -->
+    <ImageView
+        android:id="@+id/img_order"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+    android:layout_marginBottom="8dp" />
+
+    <!-- Thông tin đơn hàng -->
+    <TextView
+        android:id="@+id/tv_ma_don_hang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mã: ABC123"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_ten_khach_hang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="KH: Nguyễn Văn A" />
+
+    <TextView
+        android:id="@+id/tv_so_dien_thoai"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SĐT: 0123456789" />
+
+    <TextView
+        android:id="@+id/tv_dia_chi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Địa chỉ: ..." />
+
+    <TextView
+        android:id="@+id/tv_tong_tien"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tổng tiền: ..." />
+
+    <TextView
+        android:id="@+id/tv_ngay_tao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ngày tạo: ..." />
+
+    <TextView
+        android:id="@+id/tv_trang_thai"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Trạng thái: ..." />
+
+    <TextView
+        android:id="@+id/tv_loai_banh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loại bánh: ..." />
+
+    <TextView
+        android:id="@+id/tv_so_luong_san_pham"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sản phẩm: ..." />
+
+    <!-- Layout báo giá chỉ hiện với bánh theo yêu cầu -->
+    <LinearLayout
+        android:id="@+id/layout_bao_gia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/tv_bao_gia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Báo giá: ..." />
+
+        <TextView
+            android:id="@+id/tv_ghi_chu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ghi chú: ..." />
+    </LinearLayout>
+
+</LinearLayout>

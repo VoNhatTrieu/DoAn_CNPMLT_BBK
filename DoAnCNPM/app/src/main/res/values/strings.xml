@@ -52,4 +52,9 @@
     </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Order item labels -->
+    <string name="label_loai">Loại: %1$s</string>
+    <string name="label_ngay_giao">Giao: %1$s</string>
+    <string name="label_nguoi_nhan">Người nhận: %1$s</string>
+    <string name="label_trang_thai">Trạng thái: %1$s</string>
 </resources>

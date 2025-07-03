@@ -17,6 +17,15 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
+            android:name=".Profile.OrderDetaiActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Profile.NotificationsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.AdminQLDHActivity"
+            android:exported="false" />
+        <activity
             android:name=".admin.AddEditProductActivity"
             android:exported="false" />
         <activity

@@ -82,7 +82,9 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
           startActivity(intent);
           finish();
         }else if(id == R.id.cardManageOrders){
-            showToast("Quản lý đơn hàng");
+           Intent intent=new Intent(AdminActivity.this, AdminQLDHActivity.class);
+           startActivity(intent);
+           finish();
         }else if(id == R.id.cardUserManagement){
             showToast("Quản lý người dùng");
             }else if(id == R.id.cardRevenueReport){

@@ -4,21 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.myapplication.Profile.lsdh_order;
+import com.example.myapplication.admin.DHitem;
+import com.example.myapplication.admin.DonHang;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
@@ -35,9 +28,7 @@ public class ThanhToanActivity extends AppCompatActivity {
     private EditText ten, diachiCT, sodiethoai;
     private RadioGroup phuongthucthanhtoan;
     private TextView tvtongtien, tvtiencoc, tvtienconlai;
-    private int tongtien = 0;
-    private int tiencoc = 0;
-    private int tienconlai = 0;
+    private int tongtien = 0, tiencoc = 0, tienconlai = 0;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private Button pay;
@@ -49,9 +40,10 @@ public class ThanhToanActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thanh_toan);
 
+        // Ánh xạ
         back = findViewById(R.id.trove);
         ten = findViewById(R.id.et_receiver_name);
-        diachiCT = findViewById(R.id.et_address); // địa chỉ chi tiết
+        diachiCT = findViewById(R.id.et_address);
         sodiethoai = findViewById(R.id.et_phone_number);
         phuongthucthanhtoan = findViewById(R.id.payment_options);
         pay = findViewById(R.id.btn_pay);
@@ -67,15 +59,12 @@ public class ThanhToanActivity extends AppCompatActivity {
 
         loadAddressData();
 
-        back.setOnClickListener(v -> {
-            Log.d("Trchitietsp", "quay về trang chi tiết");
-            finish();
-        });
-
         tongtien = ghmanager.getInstance().tinhTong();
         tiencoc = tongtien / 2;
         tienconlai = tongtien - tiencoc;
         updatePTTT();
+
+        back.setOnClickListener(v -> finish());
 
         phuongthucthanhtoan.setOnCheckedChangeListener((group, checkedId) -> pay.setEnabled(checkedId != -1));
 
@@ -88,6 +77,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                 Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             if (!phone.matches("^0[0-9]{9}$")) {
                 Toast.makeText(this, "Số điện thoại không hợp lệ", Toast.LENGTH_SHORT).show();
                 return;
@@ -109,8 +99,7 @@ public class ThanhToanActivity extends AppCompatActivity {
     private void loadAddressData() {
         try {
             InputStream is = getAssets().open("address_data.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
+            byte[] buffer = new byte[is.available()];
             is.read(buffer);
             is.close();
             String json = new String(buffer, "UTF-8");
@@ -125,7 +114,6 @@ public class ThanhToanActivity extends AppCompatActivity {
             }
 
             ArrayAdapter<String> provinceAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, provinceNames);
-            provinceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerProvince.setAdapter(provinceAdapter);
 
             spinnerProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -138,7 +126,6 @@ public class ThanhToanActivity extends AppCompatActivity {
                     }
 
                     ArrayAdapter<String> districtAdapter = new ArrayAdapter<>(ThanhToanActivity.this, android.R.layout.simple_spinner_item, districtNames);
-                    districtAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerDistrict.setAdapter(districtAdapter);
                 }
 
@@ -154,7 +141,6 @@ public class ThanhToanActivity extends AppCompatActivity {
                     List<String> wards = districts.get(position).getWards();
 
                     ArrayAdapter<String> wardAdapter = new ArrayAdapter<>(ThanhToanActivity.this, android.R.layout.simple_spinner_item, wards);
-                    wardAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinnerWard.setAdapter(wardAdapter);
                 }
 
@@ -177,7 +163,7 @@ public class ThanhToanActivity extends AppCompatActivity {
     private void showPTTHdialog(String pt) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Xác nhận thanh toán cọc");
-        alertDialog.setMessage(String.format("Bạn sẽ thanh toán cọc %,dđ (50%% tổng đơn hàng) bằng %s.\n\nSố tiền còn lại %,dđ sẽ được thanh toán khi nhận hàng.\n\nXác nhận thanh toán?", tiencoc, pt, tienconlai));
+        alertDialog.setMessage(String.format("Bạn sẽ thanh toán cọc %,dđ bằng %s.\nSố còn lại %,dđ sẽ thanh toán khi nhận hàng.\n\nXác nhận không?", tiencoc, pt, tienconlai));
         alertDialog.setPositiveButton("Xác nhận", (dialog, which) -> LuuDHFB(pt));
         alertDialog.setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss());
         alertDialog.setCancelable(false);
@@ -186,7 +172,7 @@ public class ThanhToanActivity extends AppCompatActivity {
 
     private void LuuDHFB(String payment) {
         if (mAuth.getCurrentUser() == null) {
-            Toast.makeText(this, "Vui lòng đăng nhập để thanh toán", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -200,10 +186,40 @@ public class ThanhToanActivity extends AppCompatActivity {
         String phone = sodiethoai.getText().toString().trim();
 
         List<SanPham> cartItems = ghmanager.getInstance().getCartItems();
-        String orderId = db.collection("orders").document().getId();
+        List<DHitem> danhSachSanPham = new ArrayList<>();
 
-        lsdh_order order = new lsdh_order(orderId, userId, name, address, phone, payment, tongtien, tiencoc, tienconlai, cartItems, "Pending");
-        db.collection("orders").document(orderId).set(order)
+        for (SanPham sp : cartItems) {
+            String hinhAnh = sp.getImageUrl(); // Phải là URL từ Firestore
+            Log.d("CHECK_IMAGE", "SP: " + sp.getTen() + " | imageUrl: " + hinhAnh); // ✅ kiểm tra
+            danhSachSanPham.add(new DHitem(sp.getTen(), sp.getSoLuong(), sp.getGia(), hinhAnh));
+        }
+
+        String maDonHang = db.collection("don_hang").document().getId();
+
+        DonHang donHang = new DonHang();
+        donHang.setMaDonHang(maDonHang);
+        donHang.setUserId(userId);
+        donHang.setTenKhachHang(name);
+        donHang.setSoDienThoai(phone);
+        donHang.setDiaChi(address);
+        donHang.setDanhSachSanPham(danhSachSanPham);
+        donHang.setTongTien(tongtien);
+        donHang.setTrangThai("cho_xu_ly");
+        donHang.setNgayTao(com.google.firebase.Timestamp.now());
+        donHang.setNgayCapNhat(com.google.firebase.Timestamp.now());
+        donHang.setGhiChu("");
+        donHang.setLaBanhTheoYeuCau(false);
+        donHang.setLinkAnhMau("");
+        donHang.setChiPhiNguyenLieu(0);
+        donHang.setThongTinBaoGia("");
+        donHang.setDaBaoGia(false);
+
+        // Đơn hàng cho người dùng
+        lsdh_order order = new lsdh_order(maDonHang, userId, name, address, phone, payment, tongtien, tiencoc, tienconlai, cartItems, "Pending");
+
+        // Lưu vào Firestore
+        db.collection("don_hang").document(maDonHang).set(donHang);
+        db.collection("orders").document(maDonHang).set(order)
                 .addOnSuccessListener(aVoid -> {
                     ShowTTTC();
                     ghmanager.getInstance().cleatCart();
@@ -214,11 +230,9 @@ public class ThanhToanActivity extends AppCompatActivity {
     private void ShowTTTC() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Thanh toán thành công!");
-        alert.setMessage(String.format("Đã thanh toán cọc: %,dđ\nSố tiền còn lại: %,dđ (thanh toán khi nhận hàng)\n\nĐơn hàng của bạn đang được xử lý.", tiencoc, tienconlai));
+        alert.setMessage(String.format("Đã thanh toán cọc: %,dđ\nCòn lại: %,dđ sẽ thanh toán khi nhận hàng.", tiencoc, tienconlai));
         alert.setPositiveButton("OK", (dialog, which) -> finish());
         alert.setCancelable(false);
         alert.show();
     }
 }
-
-

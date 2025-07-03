@@ -109,28 +109,6 @@
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Size -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Kích thước bánh"
-                app:helperText="VD: 20cm, 25cm, 30cm..."
-                app:boxCornerRadiusTopStart="16dp"
-                app:boxCornerRadiusTopEnd="16dp"
-                app:boxCornerRadiusBottomStart="16dp"
-                app:boxCornerRadiusBottomEnd="16dp"
-                app:boxStrokeWidth="2dp"
-                app:hintTextColor="#FF6B35"
-                app:boxStrokeColor="#FF6B35">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_kich_co"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
             <!-- Image Selection -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"

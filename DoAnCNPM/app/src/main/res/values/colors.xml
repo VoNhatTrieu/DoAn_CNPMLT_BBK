@@ -11,12 +11,16 @@
     <color name="secondary_color">#FF6B9D</color>
     <color name="secondary_dark">#E55A8A</color>
     <color name="secondary_light">#FF8BB0</color>
-
+    <color name="unread_notification_bg">#FFF9C4</color>
     <!-- Accent Colors -->
     <color name="accent_color">#FF9F43</color>
     <color name="accent_dark">#E8873A</color>
     <color name="accent_light">#FFB366</color>
-
+    <color name="status_pending">#FFA726</color> <!-- cam -->
+    <color name="status_quoted">#29B6F6</color> <!-- xanh nước -->
+    <color name="status_processing">#66BB6A</color> <!-- xanh lá -->
+    <color name="status_completed">#2E7D32</color> <!-- xanh đậm -->
+    <color name="status_cancelled">#EF5350</color> <!-- đỏ -->
     <!-- Background Colors -->
     <color name="background_primary">#F8F9FA</color>
     <color name="background_secondary">#FFFFFF</color>
