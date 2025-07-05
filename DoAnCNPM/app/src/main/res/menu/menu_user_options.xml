@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_edit_user"
+        android:title="Chỉnh sửa"
+        android:icon="@drawable/baseline_edit_24" />
+
+    <item
+        android:id="@+id/action_disable_user"
+        android:title="Khóa tài khoản"
+        android:icon="@drawable/lock" />
+
+    <item
+        android:id="@+id/action_enable_user"
+        android:title="Mở khóa tài khoản"
+        android:icon="@drawable/lockouline" />
+
+    <item
+        android:id="@+id/action_delete_user"
+        android:title="Xóa người dùng"
+        android:icon="@drawable/outline_delete_24" />
+
+</menu>

@@ -86,7 +86,9 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
            startActivity(intent);
            finish();
         }else if(id == R.id.cardUserManagement){
-            showToast("Quản lý người dùng");
+           Intent intent=new Intent(AdminActivity.this, QLNDActivity.class);
+           startActivity(intent);
+           finish();
             }else if(id == R.id.cardRevenueReport){
             showToast("Báo cáo doanh thu");
         }else if(id == R.id.btnProfile){
