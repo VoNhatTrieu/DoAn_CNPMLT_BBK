@@ -90,7 +90,9 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
            startActivity(intent);
            finish();
             }else if(id == R.id.cardRevenueReport){
-            showToast("Báo cáo doanh thu");
+            Intent intent=new Intent(AdminActivity.this, BaoCaoDoanhThuActivity.class);
+            startActivity(intent);
+            finish();
         }else if(id == R.id.btnProfile){
            mAuth.signOut();
            Intent intent = new Intent(AdminActivity.this, MainActivity.class);

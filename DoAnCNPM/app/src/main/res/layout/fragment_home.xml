@@ -2,26 +2,32 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@drawable/gradient_background23">
 
-    <LinearLayout
-        android:id="@+id/fixed_content"
+    <!-- Header với hiệu ứng gradient -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/header_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_margin="3dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
         app:layout_constraintTop_toTopOf="parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/round_bg"
+            android:background="@drawable/header_gradient"
             android:orientation="vertical"
-            android:padding="17dp">
+            android:padding="20dp">
+
+            <!-- Location và notification -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -31,120 +37,197 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="19dp"
                     android:layout_weight="1"
-                    android:drawableStart="@drawable/baseline_add_location_24"
-                    android:drawablePadding="7dp"
+                    android:drawableStart="@drawable/ic_location_gradient"
+                    android:drawablePadding="10dp"
                     android:text="Hóc Môn, Việt Nam"
-                    android:textColor="#F3F5F6"
-                    android:textSize="16sp" />
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
-                <ImageView
-                    android:id="@+id/igThongbao"
+                <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_circle_notifications_24" />
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="4dp">
+
+                    <ImageView
+                        android:id="@+id/igThongbao"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:background="@drawable/notification_ripple"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_notification_animated"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
 
-            <!-- Thanh tìm kiếm với nút yêu thích và bộ lọc -->
-            <LinearLayout
+            <!-- Search bar với hiệu ứng đẹp -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:layout_marginTop="16dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="25dp"
+                app:cardElevation="6dp">
 
-                <EditText
-                    android:id="@+id/edTimKiem"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="54dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/botrontimkiem"
-                    android:drawableStart="@android:drawable/ic_menu_search"
-                    android:drawablePadding="8dp"
-                    android:hint="Tìm kiếm sản phẩm..."
-                    android:padding="8dp"
-                    android:textSize="16sp" />
+                    android:background="@drawable/search_bar_bg"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="8dp">
 
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/outline_feature_search_24"
+                        android:layout_marginEnd="12dp" />
 
-                <ImageView
-                    android:id="@+id/igBoLoc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:src="@drawable/baseline_blinds_closed_24"
-                    android:contentDescription="Bộ lọc" />
+                    <EditText
+                        android:id="@+id/edTimKiem"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:hint="Tìm kiếm sản phẩm..."
+                        android:textColorHint="#80000000"
+                        android:textSize="16sp"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text" />
 
-                <ImageView
-                    android:id="@+id/igYeuThich"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/yt"
-                    android:src="@drawable/baseline_favorite_border_24"
-                    android:contentDescription="Yêu thích" />
+                    <!-- Filter button -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="3dp">
 
-            </LinearLayout>
+                        <ImageView
+                            android:id="@+id/igBoLoc"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/filter_ripple"
+                            android:padding="8dp"
+                            android:src="@drawable/baseline_blinds_closed_24"
+                            android:clickable="true"
+                            android:focusable="true" />
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Favorite button -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="3dp">
+
+                        <ImageView
+                            android:id="@+id/igYeuThich"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/filter_ripple"
+                            android:padding="8dp"
+                            android:src="@drawable/baseline_favorite_border_24"
+                            android:clickable="true"
+                            android:focusable="true" />
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-        <!-- sản phẩm nổi bậc -->
+    <!-- Featured Products Section -->
+    <LinearLayout
+        android:id="@+id/featured_section"
+        android:layout_width="412dp"
+        android:layout_height="204dp"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/header_card"
+        tools:ignore="MissingConstraints">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:text="Sản phẩm nổi bật"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="12dp"
+            android:text="🔥 Sản phẩm nổi bật"
             android:textColor="#E61818"
-            android:textSize="18sp" />
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/Banner"
-            android:layout_width="match_parent"
-            android:layout_height="173dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:clipToPadding="false"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp" />
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/chamtron"
-            android:layout_width="112dp"
-            android:layout_height="10dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="16dp"
-            app:tabIndicatorColor="#E61818"
-            app:tabIndicatorHeight="4dp"
-            app:tabSelectedTextColor="@android:color/transparent" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <!--       mục sp-->
-        <LinearLayout
+        <!-- Enhanced ViewPager with shadow -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            app:cardCornerRadius="15dp"
+            app:cardElevation="8dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Danh mục sản phẩm"
-                android:textColor="#15958B"
-                android:textSize="16sp"
-                android:textStyle="bold"/>
-        </LinearLayout>
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/Banner"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:clipToPadding="false"
+                android:clipChildren="false"
+                android:overScrollMode="never" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Enhanced indicator -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/chamtron"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
+            app:tabIndicatorColor="#E61818"
+            app:tabIndicatorHeight="6dp"
+            app:tabRippleColor="#40E61818"
+            app:tabSelectedTextColor="@android:color/transparent" />
     </LinearLayout>
 
-    <!--cái sản phẩm ở dươới-->
+    <!-- Categories Section -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/categories_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        app:layout_constraintTop_toBottomOf="@id/featured_section">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_background23"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Danh mục sản phẩm"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Products RecyclerView với hiệu ứng -->
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/fixed_content"
+        android:scrollbarStyle="outsideOverlay"
+        app:layout_constraintTop_toBottomOf="@id/categories_header"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -153,10 +236,23 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="20dp"
+            android:clipToPadding="false"
+            android:paddingTop="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </androidx.core.widget.NestedScrollView>
 
-
+    <!-- Floating Action Button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabScrollTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        app:backgroundTint="#E61818"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="#FFFFFF"
+        app:tint="#FFFFFF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
