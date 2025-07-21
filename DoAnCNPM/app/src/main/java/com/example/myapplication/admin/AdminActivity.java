@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class AdminActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
-    private MaterialCardView QlSanPham, QLDonHang, QlNguoiDung, QLThongKe;
+    private MaterialCardView QlSanPham, QLDonHang, QlNguoiDung, QLThongKe, QLThongBao;
     private ImageView btnProfile;
 
     @Override
@@ -30,6 +30,7 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         QLDonHang = findViewById(R.id.cardManageOrders);
         QlNguoiDung = findViewById(R.id.cardUserManagement);
         QLThongKe = findViewById(R.id.cardRevenueReport);
+        QLThongBao = findViewById(R.id.cardManageMessages);
         btnProfile = findViewById(R.id.btnProfile);
 
         View rootView = findViewById(R.id.main);
@@ -61,12 +62,14 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         animaScale(QLDonHang,100);
         animaScale(QlNguoiDung,200);
         animaScale(QLThongKe,300);
+        animaScale(QLThongBao,400);
     }
     private void setupClickListeners() {
         QlSanPham.setOnClickListener(this);
         QLDonHang.setOnClickListener(this);
         QlNguoiDung.setOnClickListener(this);
         QLThongKe.setOnClickListener(this);
+        QLThongBao.setOnClickListener(this);
         btnProfile.setOnClickListener(this);
     }
 
@@ -85,7 +88,13 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
            Intent intent=new Intent(AdminActivity.this, AdminQLDHActivity.class);
            startActivity(intent);
            finish();
-        }else if(id == R.id.cardUserManagement){
+        }
+        else if(id == R.id.cardManageMessages){
+            Intent intent = new Intent(AdminActivity.this, AdminChatListActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else if(id == R.id.cardUserManagement){
            Intent intent=new Intent(AdminActivity.this, QLNDActivity.class);
            startActivity(intent);
            finish();

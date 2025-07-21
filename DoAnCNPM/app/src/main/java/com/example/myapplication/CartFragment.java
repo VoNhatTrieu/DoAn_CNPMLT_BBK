@@ -19,6 +19,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.Chat.ChatActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -86,7 +87,9 @@ public class CartFragment extends Fragment {
         });
         // Nút chat
         chatButton.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Đang phát triển tính năng chat!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(requireContext(), ChatActivity.class);
+            startActivity(intent);
+
         });
 
         return view;

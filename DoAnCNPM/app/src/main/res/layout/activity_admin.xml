@@ -39,9 +39,8 @@
                     android:layout_weight="1"
                     android:text="Chúc bạn 1 ngày tốt lành"
                     android:textColor="@android:color/white"
-
                     android:textSize="20sp"
-                   android:fontFamily="sans-serif"
+                    android:fontFamily="sans-serif"
                     android:letterSpacing="0.02" />
                 <ImageView
                     android:id="@+id/btnProfile"
@@ -106,8 +105,6 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-
-
             <!-- Quản lý hệ thong -->
             <TextView
                 android:layout_width="wrap_content"
@@ -119,7 +116,7 @@
                 android:layout_marginBottom="16dp"
                 android:alpha="0.9" />
 
-<!--            Phần quản lý sản phẩm-->
+            <!-- Phần quản lý sản phẩm -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardManageProducts"
                 android:layout_width="match_parent"
@@ -190,7 +187,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Quản lyd don hah -->
+            <!-- Quản lý đơn hàng -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardManageOrders"
                 android:layout_width="match_parent"
@@ -255,13 +252,84 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/outline_arrow_forward_ios_24"
-                       app:tint="@android:color/white"
+                        app:tint="@android:color/white"
                         android:alpha="0.7" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- QL người dùng-->
+            <!-- Quản lý tin nhắn - THÊM MỚI -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardManageMessages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="10dp"
+                app:strokeWidth="0dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/card_gradient_2">
+
+                    <LinearLayout
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/baseline_chat_24"
+                        android:gravity="center"
+                        android:layout_marginEnd="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/baseline_fiber_manual_record_24"
+                            app:tint="@android:color/white" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Quản lý tin nhắn"
+                            android:textColor="@android:color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Trả lời và quản lý tin nhắn khách hàng"
+                            android:textColor="#E8EAED"
+                            android:textSize="14sp"
+                            android:alpha="1" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/outline_arrow_forward_ios_24"
+                        app:tint="@android:color/white"
+                        android:alpha="0.7" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- QL người dùng -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardUserManagement"
                 android:layout_width="match_parent"
@@ -332,7 +400,7 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- báo cáo doah thu -->
+            <!-- Báo cáo doanh thu -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardRevenueReport"
                 android:layout_width="match_parent"
