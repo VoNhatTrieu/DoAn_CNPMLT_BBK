@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 
 public class DonHang implements Parcelable {
+    private double latitude;
+    private double longitude;
     private String maDonHang;
     private String userId;
     private String tenKhachHang;
@@ -42,6 +44,8 @@ public class DonHang implements Parcelable {
         this.ngayCapNhat = ngayTao;
         this.laBanhTheoYeuCau = false;
         this.daBaoGia = false;
+        this.latitude = 0.0;
+        this.longitude = 0.0;
     }
 
     // Constructor from OrderModel
@@ -55,9 +59,14 @@ public class DonHang implements Parcelable {
         this.danhSachSanPham = new ArrayList<>();
         this.ngayTao = null;
         this.ngayCapNhat = null;
+        this.latitude = 0.0;
+        this.longitude = 0.0;
     }
 
+    // ✅ FIXED: Parcelable constructor với latitude và longitude
     protected DonHang(Parcel in) {
+        latitude = in.readDouble();
+        longitude = in.readDouble();
         maDonHang = in.readString();
         userId = in.readString();
         tenKhachHang = in.readString();
@@ -96,8 +105,11 @@ public class DonHang implements Parcelable {
         return 0;
     }
 
+    // ✅ FIXED: writeToParcel với latitude và longitude
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
         dest.writeString(maDonHang);
         dest.writeString(userId);
         dest.writeString(tenKhachHang);
@@ -174,4 +186,8 @@ public class DonHang implements Parcelable {
     public void setThongTinBaoGia(String thongTinBaoGia) { this.thongTinBaoGia = thongTinBaoGia; }
     public boolean isDaBaoGia() { return daBaoGia; }
     public void setDaBaoGia(boolean daBaoGia) { this.daBaoGia = daBaoGia; }
+    public double getLatitude() { return latitude; }
+    public void setLatitude(double latitude) { this.latitude = latitude; }
+    public double getLongitude() { return longitude; }
+    public void setLongitude(double longitude) { this.longitude = longitude; }
 }

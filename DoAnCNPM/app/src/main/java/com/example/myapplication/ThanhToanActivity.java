@@ -1,11 +1,14 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,14 +23,15 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ThanhToanActivity extends AppCompatActivity {
+
     private ImageView back;
     private EditText ten, diachiCT, sodiethoai;
     private RadioGroup phuongthucthanhtoan;
-    private TextView tvtongtien, tvtiencoc, tvtienconlai;
+    private TextView tvtongtien, tvtiencoc, tvtienconlai, tvSelectedAddress;
+    private Button btnChooseLocation;
     private int tongtien = 0, tiencoc = 0, tienconlai = 0;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -35,12 +39,16 @@ public class ThanhToanActivity extends AppCompatActivity {
     private Spinner spinnerProvince, spinnerDistrict, spinnerWard;
     private List<Province> provinceList;
 
+    private static final int PLACE_PICKER_REQUEST = 1001;
+    private String selectedAddressFromMap = "";
+    private double selectedLatitude = 0.0;
+    private double selectedLongitude = 0.0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thanh_toan);
 
-        // Ánh xạ
         back = findViewById(R.id.trove);
         ten = findViewById(R.id.et_receiver_name);
         diachiCT = findViewById(R.id.et_address);
@@ -53,6 +61,8 @@ public class ThanhToanActivity extends AppCompatActivity {
         spinnerProvince = findViewById(R.id.spinner_province);
         spinnerDistrict = findViewById(R.id.spinner_district);
         spinnerWard = findViewById(R.id.spinner_ward);
+        btnChooseLocation = findViewById(R.id.btn_choose_location);
+        tvSelectedAddress = findViewById(R.id.tv_selected_address);
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -66,11 +76,14 @@ public class ThanhToanActivity extends AppCompatActivity {
 
         back.setOnClickListener(v -> finish());
 
+        // ✅ Chỉ dùng bản đồ custom
+        btnChooseLocation.setOnClickListener(v -> openPlacePicker());
+
         phuongthucthanhtoan.setOnCheckedChangeListener((group, checkedId) -> pay.setEnabled(checkedId != -1));
 
         pay.setOnClickListener(v -> {
             String name = ten.getText().toString().trim();
-            String dcChiTiet = diachiCT.getText().toString().trim();
+            String dcChiTiet = getFullAddress();
             String phone = sodiethoai.getText().toString().trim();
 
             if (name.isEmpty() || dcChiTiet.isEmpty() || phone.isEmpty()) {
@@ -94,6 +107,78 @@ public class ThanhToanActivity extends AppCompatActivity {
         });
 
         pay.setEnabled(false);
+    }
+
+    private void openPlacePicker() {
+        Intent intent = new Intent(this, MapPickerActivity.class);
+        startActivityForResult(intent, PLACE_PICKER_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK && data != null) {
+            selectedAddressFromMap = data.getStringExtra("selected_address");
+            selectedLatitude = data.getDoubleExtra("latitude", 0.0);
+            selectedLongitude = data.getDoubleExtra("longitude", 0.0);
+
+            tvSelectedAddress.setText("📍 " + selectedAddressFromMap);
+            tvSelectedAddress.setVisibility(View.VISIBLE);
+
+            parseAddressToFields(selectedAddressFromMap);
+
+            Toast.makeText(this, "Đã chọn vị trí từ bản đồ", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void parseAddressToFields(String fullAddress) {
+        try {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocationName(fullAddress, 1);
+
+            if (!addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                String addressLine = address.getAddressLine(0);
+                if (addressLine != null) {
+                    diachiCT.setText(addressLine);
+                }
+
+                String city = address.getAdminArea();
+                if (city != null) {
+                    selectSpinnerValue(spinnerProvince, city);
+                }
+            }
+        } catch (IOException e) {
+            Log.e("Geocoder", "Error parsing address", e);
+        }
+    }
+
+    private void selectSpinnerValue(Spinner spinner, String value) {
+        ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+        if (adapter != null) {
+            for (int i = 0; i < adapter.getCount(); i++) {
+                if (adapter.getItem(i).toString().contains(value)) {
+                    spinner.setSelection(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    private String getFullAddress() {
+        if (!selectedAddressFromMap.isEmpty()) {
+            return selectedAddressFromMap;
+        } else {
+            String dcChiTiet = diachiCT.getText().toString().trim();
+            if (dcChiTiet.isEmpty()) return "";
+
+            String tinh = spinnerProvince.getSelectedItem() != null ? spinnerProvince.getSelectedItem().toString() : "";
+            String huyen = spinnerDistrict.getSelectedItem() != null ? spinnerDistrict.getSelectedItem().toString() : "";
+            String xa = spinnerWard.getSelectedItem() != null ? spinnerWard.getSelectedItem().toString() : "";
+
+            return dcChiTiet + ", " + xa + ", " + huyen + ", " + tinh;
+        }
     }
 
     private void loadAddressData() {
@@ -129,8 +214,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                     spinnerDistrict.setAdapter(districtAdapter);
                 }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
+                @Override public void onNothingSelected(AdapterView<?> parent) {}
             });
 
             spinnerDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -144,8 +228,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                     spinnerWard.setAdapter(wardAdapter);
                 }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {}
+                @Override public void onNothingSelected(AdapterView<?> parent) {}
             });
 
         } catch (IOException e) {
@@ -178,20 +261,14 @@ public class ThanhToanActivity extends AppCompatActivity {
 
         String userId = mAuth.getCurrentUser().getUid();
         String name = ten.getText().toString().trim();
-        String tinh = spinnerProvince.getSelectedItem().toString();
-        String huyen = spinnerDistrict.getSelectedItem().toString();
-        String xa = spinnerWard.getSelectedItem().toString();
-        String dcChiTiet = diachiCT.getText().toString().trim();
-        String address = dcChiTiet + ", " + xa + ", " + huyen + ", " + tinh;
+        String address = getFullAddress();
         String phone = sodiethoai.getText().toString().trim();
 
         List<SanPham> cartItems = ghmanager.getInstance().getCartItems();
         List<DHitem> danhSachSanPham = new ArrayList<>();
 
         for (SanPham sp : cartItems) {
-            String hinhAnh = sp.getImageUrl(); // Phải là URL từ Firestore
-            Log.d("CHECK_IMAGE", "SP: " + sp.getTen() + " | imageUrl: " + hinhAnh); // ✅ kiểm tra
-            danhSachSanPham.add(new DHitem(sp.getTen(), sp.getSoLuong(), sp.getGia(), hinhAnh));
+            danhSachSanPham.add(new DHitem(sp.getTen(), sp.getSoLuong(), sp.getGia(), sp.getImageUrl()));
         }
 
         String maDonHang = db.collection("don_hang").document().getId();
@@ -214,10 +291,13 @@ public class ThanhToanActivity extends AppCompatActivity {
         donHang.setThongTinBaoGia("");
         donHang.setDaBaoGia(false);
 
-        // Đơn hàng cho người dùng
+        if (selectedLatitude != 0.0 && selectedLongitude != 0.0) {
+            donHang.setLatitude(selectedLatitude);
+            donHang.setLongitude(selectedLongitude);
+        }
+
         lsdh_order order = new lsdh_order(maDonHang, userId, name, address, phone, payment, tongtien, tiencoc, tienconlai, cartItems, "Pending");
 
-        // Lưu vào Firestore
         db.collection("don_hang").document(maDonHang).set(donHang);
         db.collection("orders").document(maDonHang).set(order)
                 .addOnSuccessListener(aVoid -> {
