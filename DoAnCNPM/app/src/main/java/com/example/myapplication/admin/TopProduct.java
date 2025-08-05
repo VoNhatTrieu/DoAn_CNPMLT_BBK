@@ -6,7 +6,9 @@ public class TopProduct {
     private double doanhThu;
     private String imageUrl;
 
-    public TopProduct() {}
+    public TopProduct() {
+        // Constructor mặc định cho Firebase
+    }
 
     public TopProduct(String ten, int soLuong, double doanhThu, String imageUrl) {
         this.ten = ten;
@@ -15,32 +17,34 @@ public class TopProduct {
         this.imageUrl = imageUrl;
     }
 
+    // Getters
     public String getTen() {
         return ten;
-    }
-
-    public void setTen(String ten) {
-        this.ten = ten;
     }
 
     public int getSoLuong() {
         return soLuong;
     }
 
-    public void setSoLuong(int soLuong) {
-        this.soLuong = soLuong;
-    }
-
     public double getDoanhThu() {
         return doanhThu;
     }
 
-    public void setDoanhThu(double doanhThu) {
-        this.doanhThu = doanhThu;
-    }
-
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    // Setters
+    public void setTen(String ten) {
+        this.ten = ten;
+    }
+
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
+    }
+
+    public void setDoanhThu(double doanhThu) {
+        this.doanhThu = doanhThu;
     }
 
     public void setImageUrl(String imageUrl) {

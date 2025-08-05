@@ -252,7 +252,7 @@
 
         </LinearLayout>
 
-        <!-- Chart Section -->
+        <!-- Line Chart Section -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -269,7 +269,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Biểu đồ doanh thu"
+                    android:text="Biểu đồ doanh thu theo thời gian"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="12dp" />
@@ -283,6 +283,78 @@
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
+        <!-- Pie Chart and Bar Chart Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="16dp">
+
+            <!-- Pie Chart Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Phân bố doanh thu theo loại đơn hàng"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp" />
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        tools:ignore="MissingClass" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Bar Chart Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Top 5 sản phẩm bán chạy (theo số lượng)"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp" />
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        tools:ignore="MissingClass" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
 
         <!-- Top Products -->
         <com.google.android.material.card.MaterialCardView
@@ -301,7 +373,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sản phẩm bán chạy"
+                    android:text="Sản phẩm bán chạy (theo doanh thu)"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="12dp" />
@@ -315,9 +387,6 @@
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
-
-        <!-- Detailed Report -->
-
 
         <!-- Loading Progress -->
         <ProgressBar

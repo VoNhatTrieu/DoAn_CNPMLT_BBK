@@ -16,11 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.data.*;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -36,6 +40,8 @@ public class BaoCaoDoanhThuActivity extends AppCompatActivity {
     private TextView tvTotalRevenue, tvTotalOrders;
     private ImageView btnBack;
     private LineChart lineChart;
+    private PieChart pieChart;
+    private BarChart barChart;
     private RecyclerView recyclerViewTopProducts;
     private ProgressBar progressBar;
 
@@ -72,6 +78,8 @@ public class BaoCaoDoanhThuActivity extends AppCompatActivity {
         tvTotalRevenue = findViewById(R.id.tvTotalRevenue);
         tvTotalOrders = findViewById(R.id.tvTotalOrders);
         lineChart = findViewById(R.id.lineChart);
+        pieChart = findViewById(R.id.pieChart);
+        barChart = findViewById(R.id.barChart);
         recyclerViewTopProducts = findViewById(R.id.recyclerViewTopProducts);
         progressBar = findViewById(R.id.progressBar);
         btnBack = findViewById(R.id.btnBack);
@@ -320,7 +328,9 @@ public class BaoCaoDoanhThuActivity extends AppCompatActivity {
             addDefaultChartData();
         }
 
-        drawChart(ngayDoanhThuMap);
+        drawLineChart(ngayDoanhThuMap);
+        drawPieChart();
+        drawBarChart();
         updateTopProductsList();
 
         Log.d("BaoCaoDoanhThu", "Top products: " + topProducts.size());
@@ -351,7 +361,8 @@ public class BaoCaoDoanhThuActivity extends AppCompatActivity {
         return String.format(Locale.getDefault(), "%,.0f VNĐ", amount);
     }
 
-    private void drawChart(Map<Long, Float> map) {
+    // Biểu đồ đường (LineChart) - giữ nguyên
+    private void drawLineChart(Map<Long, Float> map) {
         List<Entry> entries = new ArrayList<>();
 
         // Sắp xếp dữ liệu theo thời gian
@@ -379,7 +390,80 @@ public class BaoCaoDoanhThuActivity extends AppCompatActivity {
         LineData lineData = new LineData(dataSet);
         lineChart.setData(lineData);
 
-        configureChart(indexToDateMap, entries.size());
+        configureLineChart(indexToDateMap, entries.size());
+    }
+
+    // Biểu đồ tròn (PieChart) - Mới thêm
+    private void drawPieChart() {
+        List<PieEntry> entries = new ArrayList<>();
+
+        // Tạo dữ liệu cho biểu đồ tròn - so sánh đơn thường vs đơn custom
+        if (tongDonThuong > 0) {
+            entries.add(new PieEntry((float) doanhThuThuong, "Đơn thường"));
+        }
+        if (tongDonCustom > 0) {
+            entries.add(new PieEntry((float) doanhThuCustom, "Đơn custom"));
+        }
+
+        // Nếu không có dữ liệu, thêm entry mặc định
+        if (entries.isEmpty()) {
+            entries.add(new PieEntry(1f, "Không có dữ liệu"));
+        }
+
+        PieDataSet dataSet = new PieDataSet(entries, "Phân loại doanh thu");
+
+        // Màu sắc cho biểu đồ
+        List<Integer> colors = new ArrayList<>();
+        colors.add(Color.parseColor("#6366F1")); // Xanh tím cho đơn thường
+        colors.add(Color.parseColor("#EF4444")); // Đỏ cho đơn custom
+        colors.add(Color.parseColor("#9CA3AF")); // Xám cho không có dữ liệu
+        dataSet.setColors(colors);
+
+        dataSet.setValueTextSize(12f);
+        dataSet.setValueTextColor(Color.WHITE);
+        dataSet.setValueFormatter(new PercentFormatter());
+
+        PieData pieData = new PieData(dataSet);
+        pieChart.setData(pieData);
+
+        configurePieChart();
+    }
+
+    // Biểu đồ cột (BarChart) - Mới thêm
+    private void drawBarChart() {
+        List<BarEntry> entries = new ArrayList<>();
+        List<String> labels = new ArrayList<>();
+
+        // Lấy top 5 sản phẩm bán chạy nhất
+        List<TopProduct> top5Products = new ArrayList<>();
+        for (int i = 0; i < Math.min(5, topProducts.size()); i++) {
+            top5Products.add(topProducts.get(i));
+        }
+
+        // Tạo dữ liệu cho biểu đồ cột
+        for (int i = 0; i < top5Products.size(); i++) {
+            TopProduct product = top5Products.get(i);
+            entries.add(new BarEntry(i, product.getSoLuong()));
+            labels.add(product.getTen().length() > 10 ?
+                    product.getTen().substring(0, 10) + "..." : product.getTen());
+        }
+
+        // Nếu không có dữ liệu, thêm entry mặc định
+        if (entries.isEmpty()) {
+            entries.add(new BarEntry(0, 0));
+            labels.add("Không có dữ liệu");
+        }
+
+        BarDataSet dataSet = new BarDataSet(entries, "Số lượng bán");
+        dataSet.setColor(Color.parseColor("#10B981")); // Màu xanh lá
+        dataSet.setValueTextSize(10f);
+        dataSet.setValueTextColor(Color.parseColor("#374151"));
+
+        BarData barData = new BarData(dataSet);
+        barData.setBarWidth(0.8f);
+        barChart.setData(barData);
+
+        configureBarChart(labels);
     }
 
     private LineDataSet createLineDataSet(List<Entry> entries) {
@@ -406,7 +490,7 @@ public class BaoCaoDoanhThuActivity extends AppCompatActivity {
         return dataSet;
     }
 
-    private void configureChart(Map<Integer, String> indexToDateMap, int entriesSize) {
+    private void configureLineChart(Map<Integer, String> indexToDateMap, int entriesSize) {
         // Cấu hình trục X
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -432,8 +516,88 @@ public class BaoCaoDoanhThuActivity extends AppCompatActivity {
         // Cấu hình trục Y trái
         configureYAxis();
 
-        // Cấu hình chung cho biểu đồ
-        configureChartAppearance();
+        // Cấu hình chung cho biểu đồ LineChart
+        configureLineChartAppearance();
+    }
+
+    private void configurePieChart() {
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setUsePercentValues(true);
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setHoleColor(Color.WHITE);
+        pieChart.setHoleRadius(40f);
+        pieChart.setTransparentCircleRadius(45f);
+        pieChart.setDrawCenterText(true);
+        pieChart.setCenterText("Doanh thu\ntheo loại");
+        pieChart.setCenterTextSize(12f);
+        pieChart.setCenterTextColor(Color.parseColor("#374151"));
+
+        // Cấu hình legend
+        Legend legend = pieChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        legend.setDrawInside(false);
+        legend.setTextSize(12f);
+
+        // Cấu hình tương tác cho PieChart
+        pieChart.setTouchEnabled(true);
+        pieChart.setDragDecelerationFrictionCoef(0.95f);
+        pieChart.setRotationEnabled(true);
+        pieChart.setHighlightPerTapEnabled(true);
+
+        // Animation
+        pieChart.animateY(1000);
+        pieChart.invalidate();
+    }
+
+    private void configureBarChart(List<String> labels) {
+        barChart.getDescription().setEnabled(false);
+        barChart.setBackgroundColor(Color.WHITE);
+
+        // Cấu hình trục X
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setAxisLineColor(Color.parseColor("#9CA3AF"));
+        xAxis.setTextColor(Color.parseColor("#6B7280"));
+        xAxis.setTextSize(10f);
+        xAxis.setLabelRotationAngle(-45f);
+        xAxis.setGranularity(1f);
+
+        // Custom formatter cho trục X
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                int index = (int) value;
+                return index >= 0 && index < labels.size() ? labels.get(index) : "";
+            }
+        });
+
+        // Cấu hình trục Y
+        YAxis leftAxis = barChart.getAxisLeft();
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setGridColor(Color.parseColor("#E5E7EB"));
+        leftAxis.setAxisLineColor(Color.parseColor("#9CA3AF"));
+        leftAxis.setTextColor(Color.parseColor("#6B7280"));
+        leftAxis.setTextSize(10f);
+        leftAxis.setAxisMinimum(0f);
+
+        barChart.getAxisRight().setEnabled(false);
+
+        // Cấu hình legend
+        barChart.getLegend().setEnabled(false);
+
+        // Cấu hình tương tác cho BarChart
+        barChart.setTouchEnabled(true);
+        barChart.setDragEnabled(true);
+        barChart.setScaleEnabled(false);
+        barChart.setPinchZoom(false);
+        barChart.setDoubleTapToZoomEnabled(false);
+
+        // Animation
+        barChart.animateY(1000);
+        barChart.invalidate();
     }
 
     private void configureYAxis() {
@@ -458,17 +622,16 @@ public class BaoCaoDoanhThuActivity extends AppCompatActivity {
         lineChart.getAxisRight().setEnabled(false);
     }
 
-    private void configureChartAppearance() {
+    private void configureLineChartAppearance() {
         lineChart.getDescription().setEnabled(false);
         lineChart.setDrawBorders(false);
         lineChart.setBackgroundColor(Color.WHITE);
-        lineChart.setGridBackgroundColor(Color.WHITE);
         lineChart.setDrawGridBackground(false);
 
         // Cấu hình legend
         lineChart.getLegend().setEnabled(false);
 
-        // Cấu hình tương tác
+        // Cấu hình tương tác cho LineChart
         lineChart.setTouchEnabled(true);
         lineChart.setDragEnabled(true);
         lineChart.setScaleEnabled(false);
